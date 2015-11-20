@@ -18,7 +18,7 @@ class ucvsConfig
 	public var $dbHost = "";	//Database host address
 	public var $dbID = "";	//Username
 	public var $dbPW = "";	//Password
-	public var $dbName = "";		//Database Name
+	public var $dbName = "";	//Database Name (when using UCVS for Silkroad please use Account Database name e.g. SRO_VT_ACCOUNT)
 	
 	
 	/*=================================================================================*/
@@ -37,8 +37,8 @@ class ucvsConfig
 	
 	//Custom point system settings
 	public var $tableName = "";	//name of the table you store user info in
-	public var $idRowName = "";	//name of the row you identify the user with
-	public var $pointRowName = "";	//name of the row you store the points in
+	public var $idColName = "";	//name of the column you identify the user with
+	public var $pointColName = "";	//name of the column you store the points in
 	
 	
 	/*=================================================================================*/
