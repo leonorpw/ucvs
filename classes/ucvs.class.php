@@ -5,9 +5,9 @@
 /*	 released under GPLv3 license	   */
 /***************************************/
 
-require_once("classes/config.class.php");
-require_once("classes/mssql.class.php");
-require_once("classes/mysql.class.php");
+require_once("config.class.php");
+require_once("mssql.class.php");
+require_once("mysql.class.php");
 
 class ucvsCore
 {
@@ -18,7 +18,7 @@ class ucvsCore
 	///Constructor being executed at object creation. Will automatically choose DBMS and connect to DB.
 	///Return values: none
 	///</summary>
-	function __construct()
+	public function __construct()
 	{
 		if($config->dbMode == 0)
 		{
@@ -69,6 +69,22 @@ class ucvsCore
 	}
 	
 	///<summary>
+	///Choose the right reward function, call it and return its return value
+	///Return values: Success => true | Failure => Error message
+	///</summary>
+	private function doReward($userID)
+	{
+		if($config->rewardMode == 0)
+		{
+			return rewardSilk($userID);
+		}
+		else
+		{
+			return rewardPoints($userID);
+		}
+	}
+	
+	///<summary>
 	///Check if a given IP is allowed to use ucvs
 	///Return values: true | false | Error message
 	///</summary>
@@ -92,65 +108,79 @@ class ucvsCore
 	}
 	
 	///<summary>
-	///Check if a given IP/User voted during the last x hours on a given page
+	///Check if a given IP/User in a dataset voted during the last x hours on a given page
 	///Return values: true | false
 	///</summary>
-	public function checkDelay($userID, $ip, $page)
+	private function checkDelay(array $data, $siteIP)
 	{
 		//TODO
 	}
 	
 	///<summary>
-	///Process data sent by xtremetop100.com
+	///Check if a given IP/User in a dataset voted during the last x hours on a given page
+	///Return values: true | false
+	///</summary>
+	private function updateDelay($userID, $userIP, $siteIP)
+	{
+		//TODO
+	}
+	
+	///<summary>
+	///Process data sent by the toplist
+	///Return values: Success => true | Failure => Error message
+	///</summary>
+	public function procData(array $data, $siteIP)
+	{
+		//TODO: check/update delay table
+		switch($siteIP)
+		{
+			case "199.59.161.214": //xtremetop100
+				$result = doReward($data['custom']);
+			break;
+			
+			case "198.148.82.98": //gtop100
+				if(abs($data['Successful') == 0)
+				{
+					$result = doReward($data['pingUsername');
+				}
+				else
+				{
+					$result = $data['Reason'];
+				}
+			break;
+			
+			case "104.24.15.11": //topg
+				$result = doReward($data['p_resp'];
+			break;
+			
+			case "104.24.2.32": //top100arena
+				$result = doReward($data['postback'];
+			break;
+			
+			case "198.20.70.235": //arena-top100
+			case "78.46.67.100": //silkroad-servers
+			case "178.63.126.52": //private-server
+				if($data['voted'] == 1)
+				{
+					$result = doReward($data['userid']);
+				}
+				else
+				{
+					$result = "User " . $data['userid'] . " voted already today!" . PHP_EOL;
+				}
+			break;
+		}
+		
+		return $result;
+	}
+	
+	///<summary>
+	///Log a given message if logging is activated
 	///Return values: none
 	///</summary>
-	public function procXtremetop($userID, $votingIP)
+	public function Log($message)
 	{
-		//TODO: update delay table
-		if($config->rewardMode == 0)
-		{
-			rewardSilk($userID);
-		}
-		else
-		{
-			rewardPoints($userID);
-		}
-	}
-	
-	///<summary>
-	///Process data sent by VisioList based sites
-	///Return values: TODO
-	///</summary>
-	public function procVL($userID, $userIP, $valid)
-	{
-		
-	}
-	
-	///<summary>
-	///Process data sent by gtop100.com
-	///Return values: TODO
-	///</summary>
-	public function procGTop($pingUsername, $voterIP, $success, $reason)
-	{
-		
-	}
-	
-	///<summary>
-	///Process data sent by topg.org
-	///Return values: TODO
-	///</summary>
-	public function procTopG($userID, $userIP)
-	{
-		
-	}
-	
-	///<summary>
-	///Process data sent by top100arena.com
-	///Return values: TODO
-	///</summary>
-	public function procTop100Arena($userID)
-	{
-		
+		//TODO
 	}
 }
 
