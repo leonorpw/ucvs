@@ -11,8 +11,8 @@ require_once("mysql.class.php");
 
 class ucvsCore
 {
-	private var $config = new ucvsConfig(); //Declare and initialize config variable
-	private var $dbCon;
+	var $config;
+	var $dbCon;
 	
 	///<summary>
 	///Constructor being executed at object creation. Will automatically choose DBMS and connect to DB.
@@ -20,13 +20,15 @@ class ucvsCore
 	///</summary>
 	public function __construct()
 	{
-		if($config->dbMode == 0)
+		$this->config = new ucvsConfig();
+		
+		if($this->config->dbMode == 0)
 		{
-			$dbCon = cMSSQL::withDB($config->dbHost, $config->dbID, $config->dbPW, $config->$dbName);
+			$this->dbCon = cMSSQL::withDB($this->config->dbHost, $this->config->dbID, $this->config->dbPW, $this->config->dbName);
 		}
 		else if ($config->dbMode == 1)
 		{
-			$dbCon = cMySQL::withDB($config->dbHost, $config->dbID, $config->dbPW, $config->$dbName);
+			$this->dbCon = cMySQL::withDB($this->config->dbHost, $this->config->dbID, $this->config->dbPW, $this->config->dbName);
 		}
 		else
 		{
@@ -42,7 +44,7 @@ class ucvsCore
 	{
 		if(!empty($userID) && is_numeric($userID))
 		{
-			$dbCon->execute("EXEC [{$config->dbName}].[CGI].[CGI_WebPurchaseSilk] @OrderID = N'VoteSystem', @UserID = {$dbCon->secure($userID)}, @PkgID = 0, @NumSilk = {$dbCon->secure($config->rewardAmount)}, @Price = 0");
+			$this->dbCon->execute("EXEC [{$this->config->dbName}].[CGI].[CGI_WebPurchaseSilk] @OrderID = N'VoteSystem', @UserID = {$this->dbCon->secure($userID)}, @PkgID = 0, @NumSilk = {$this->dbCon->secure($this->config->rewardAmount)}, @Price = 0");
 			return true;
 		}
 		else
@@ -59,7 +61,7 @@ class ucvsCore
 	{
 		if(!empty($userID))
 		{
-			$dbCon->execute("UPDATE {$config->tableName} SET {$config->pointColName} = {$config->pointColName} + {$config->rewardAmount} WHERE {$config->idColName} LIKE {$dbCon->secure($userID)}");
+			$this->dbCon->execute("UPDATE {$this->config->tableName} SET {$this->config->pointColName} = {$this->config->pointColName} + {$this->config->rewardAmount} WHERE {$this->config->idColName} LIKE {$this->dbCon->secure($userID)}");
 			return true;
 		}
 		else
@@ -74,36 +76,29 @@ class ucvsCore
 	///</summary>
 	private function doReward($userID)
 	{
-		if($config->rewardMode == 0)
+		if($this->config->rewardMode == 0)
 		{
-			return rewardSilk($userID);
+			return $this->rewardSilk($userID);
 		}
 		else
 		{
-			return rewardPoints($userID);
+			return $this->rewardPoints($userID);
 		}
 	}
 	
 	///<summary>
 	///Check if a given IP is allowed to use ucvs
-	///Return values: true | false | Error message
+	///Return values: true | false
 	///</summary>
 	public function checkIP($ip)
 	{
-		if(!empty($ip))
+		if(in_array($ip, $this->config->whitelist))
 		{
-			if(in_array($ip, $config->whitelist))
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
+			return true;
 		}
 		else
 		{
-			return "Error: Cannot check an empty IP!" . PHP_EOL;
+			return false;
 		}
 	}
 	
@@ -135,13 +130,13 @@ class ucvsCore
 		switch($siteIP)
 		{
 			case "199.59.161.214": //xtremetop100
-				$result = doReward($data['custom']);
+				$result = $this->doReward($data['custom']);
 			break;
 			
 			case "198.148.82.98": //gtop100
-				if(abs($data['Successful') == 0)
+				if(abs($data['Successful']) == 0)
 				{
-					$result = doReward($data['pingUsername');
+					$result = $this->doReward($data['pingUsername']);
 				}
 				else
 				{
@@ -150,24 +145,28 @@ class ucvsCore
 			break;
 			
 			case "104.24.15.11": //topg
-				$result = doReward($data['p_resp'];
+				$result = $this->doReward($data['p_resp']);
 			break;
 			
 			case "104.24.2.32": //top100arena
-				$result = doReward($data['postback'];
+				$result = $this->doReward($data['postback']);
 			break;
 			
 			case "198.20.70.235": //arena-top100
 			case "78.46.67.100": //silkroad-servers
 			case "178.63.126.52": //private-server
+			case "5.146.225.126": //test
 				if($data['voted'] == 1)
 				{
-					$result = doReward($data['userid']);
+					$result = $this->doReward($data['userid']);
 				}
 				else
 				{
 					$result = "User " . $data['userid'] . " voted already today!" . PHP_EOL;
 				}
+			break;
+			default:
+				$result = "Wrong IP called!";
 			break;
 		}
 		
@@ -175,12 +174,69 @@ class ucvsCore
 	}
 	
 	///<summary>
+	///Extracts the user name/id from a given dataset
+	///Return values: Success => user name/id | Failure => false
+	///</summary>
+	public function getUser(array $data)
+	{
+		if(isset($data['custom']))
+		{
+			return $data['custom'];
+		}
+		else if(isset($data['pingUsername']))
+		{
+			return $data['pingUsername'];
+		}
+		else if(isset($data['p_resp']))
+		{
+			return $data['p_resp'];
+		}
+		else if(isset($data['postback']))
+		{
+			return $data['postback'];
+		}
+		else if(isset($data['userid']))
+		{
+			return $data['userid'];
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	///<summary>
+	///Gets the site name from whitelist by a given IP
+	///Return values: Success => site name | Failure => false
+	///</summary>
+	public function getSite($ip)
+	{
+		$result = false;
+		while ($value = current($this->config->whitelist))
+		{
+			if ($value == $ip)
+			{
+				$result = key($this->config->whitelist);
+			}
+			next($this->config->whitelist);
+		}
+		return $result;
+	}
+	
+	///<summary>
 	///Log a given message if logging is activated
-	///Return values: none
+	///Return values: Success => number of bytes written | Failure => false
 	///</summary>
 	public function Log($message)
 	{
-		//TODO
+		
+			//error_log(date('[Y-m-d H:i] '). $message . PHP_EOL, 3, "ucvs.log");
+			//file_put_contents("ucvs.log", date('[Y-m-d H:i] ') . $message . "\n", FILE_APPEND) or print_r(error_get_last());
+			return @file_put_contents("logs/ucvs_" . date("Ymd") . ".log", 
+				"[" . date("H:i:s") . "] " . $message . "\r\n",
+				FILE_APPEND
+			);
+		
 	}
 }
 

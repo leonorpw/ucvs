@@ -7,8 +7,8 @@
 
 class cMSSQL
 {
-	private var $dbLink;	//Stores the DB connection result set
-	public var $dbSelected;	//Flag that signals wheather the Database was selected or not
+	var $dbLink;	//Stores the DB connection result set
+	var $dbSelected;	//Flag that signals wheather the Database was selected or not
 	
 	///<summary>
 	///Constructor being executed at object creation, initialize members.
@@ -36,7 +36,7 @@ class cMSSQL
 	public static function withDB($host, $id, $pw, $db) {
     	$instance = new self();
 		$instance->connect($host, $id, $pw);
-    	$instance->selectDB($dbName);
+    	$instance->selectDB($db);
     	return $instance;
     }
 	

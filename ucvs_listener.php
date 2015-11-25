@@ -5,6 +5,18 @@
 /*	 released under GPLv3 license	   */
 /***************************************/
 
+
+/*=================================================================================*/
+/* Debug settings																   */
+/* These settings are solely for debug purposes, dont change anything here!		   */
+/*=================================================================================*/
+
+//Uncomment to show all errors except notice and warnings
+//error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
+
+//in case no errors are shown uncomment this
+//ini_set("display_errors", 1);
+
 require_once("classes/ucvs.class.php");
 
 $ucvs = new ucvsCore();
@@ -26,30 +38,22 @@ $reqIP = isset($_SERVER['HTTP_CF_CONNECTING_IP']) ? $_SERVER['HTTP_CF_CONNECTING
 
 //Check if requesting IP is whitelisted
 $check = $ucvs->checkIP($reqIP);
-if($check !== true) //IP is invalid or not whitelisted
+if($check != true)
 {
-	if($check !== false)
-	{
-		//TODO: logging
-		echo $check; //IP is invalid
-	}
-	else
-	{
-		//TODO: logging
-		echo 'Wrong IP!'; //IP is not whitelisted
-	}
+	$ucvs->Log("Wrong IP requested UCVS! - IP: " . $reqIP);
+	echo 'Wrong IP!';
 }
 else 
 {
-	$result = $ucvs->procData($the_request, $reqIP); //IP is whitelisted, process data
-	if($result !== true)//Processing failed, output error
+	$result = $ucvs->procData($the_request, $reqIP);
+	if($result != true)
 	{
-		//TODO: logging
+		$ucvs->Log("Error while processing data: " . $result . " - User ID: " . $ucvs->getUser($the_request) . " Site: " . $ucvs->getSite($reqIP));
 		echo $result;
 	}
 	else
 	{
-		//TODO: logging
+		$ucvs->Log("Valid UCVS request finished successfull" . " - User ID: " . $ucvs->getUser($the_request) . " Site: " . $ucvs->getSite($reqIP));
 		echo 'OK';
 	}
 }
