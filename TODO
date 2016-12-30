@@ -1,0 +1,40 @@
+TODO
+
+
+index.php
+
+	- Check if ucvs is installed else load install.php from /install/ 
+
+#########################################################
+
+/install/install.php
+
+	-delete install.php after installation!
+	-create mysql DB
+
+
+#########################################################
+write conf file for DB login and tables
+
+inculde them to config.class.php
+
+//Database Mode - Choose which database management system you want to use
+//Possible values: 0 => mssql | 1 => mysql
+var $dbMode = 0;
+	
+var $dbHost = "";	//Database host address
+var $dbID = "";	//Username
+var $dbPW = "";	//Password
+var $dbName = "";	//Database Name (when using UCVS for Silkroad please use Account Database name e.g. SRO_VT_ACCOUNT)
+
+
+//Custom point system settings
+var $tableName = "";	//name of the table you store user info in
+var $idColName = "";	//name of the column you identify the user with
+var $pointColName = "";	//name of the column you store the points in
+
+#########################################################
+
+MSSQL DB
+	where i should save my Tables?
+

@@ -153,9 +153,26 @@ class ucvsCore
 			break;
 			
 			case "198.20.70.235": //arena-top100
-			case "78.46.67.100": //silkroad-servers
-			case "178.63.126.52": //private-server
-			case "5.146.225.126": //test
+				if($data['voted'] == 1)
+				{
+					$result = $this->doReward($data['userid']);
+				}
+				else
+				{
+					$result = "User " . $data['userid'] . " voted already today!" . PHP_EOL;
+				}
+			break;
+			case "193.70.3.149": //silkroad-servers
+				if($data['voted'] == 1)
+				{
+					$result = $this->doReward($data['userid']);
+				}
+				else
+				{
+					$result = "User " . $data['userid'] . " voted already today!" . PHP_EOL;
+				}
+			break;
+			case "193.70.3.149": //private-server				
 				if($data['voted'] == 1)
 				{
 					$result = $this->doReward($data['userid']);
