@@ -1,0 +1,9 @@
+#wrapper {
+	margin: 0 auto;
+	width: 768px;
+}
+
+#header {
+	width: 100%;
+	background: #ccc;
+}
