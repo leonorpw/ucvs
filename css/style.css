@@ -1,9 +1,94 @@
-#wrapper {
-	margin: 0 auto;
-	width: 768px;
+/***************************************/
+/* UCVS - Unified Callback Vote Script */
+/*		Written by LemoniscooL		   */
+/*	 released under GPLv3 license	   */
+/***************************************/
+
+
+/* General Styles
+==================================================*/
+body {
+	background: #dadada;
 }
 
 #header {
 	width: 100%;
-	background: #ccc;
+	background: #333;
+	border-bottom: #3c3c3c;
 }
+
+.logo {
+	width: 256px;
+	height: 113px;
+	margin-left: 25px;
+}
+
+#content {
+	padding-top: 25px;
+	margin: 0 auto;
+	width: 768px;
+}
+
+.divider {
+    border-bottom: none;
+    background-color: #333;
+    height: 1px;
+    margin: 0.5em 0 1.5em 0;
+}
+
+.divider span {
+    background-color: #e8a816;
+    display: block;
+    width: 50px;
+    height: 1px;
+}
+
+
+
+/* Alert Styles
+==================================================*/
+.alert {
+    padding: 8px 35px 8px 14px;
+    margin-bottom: 20px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    background-color: #fcf8e3;
+    border: 1px solid #fbeed5;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.alert, .alert h4 {
+    color: #c09853;
+}
+
+.alert-danger, .alert-error {
+    background-color: #f2dede;
+    border-color: #eed3d7;
+    color: #b94a48;
+}
+
+
+
+/* Install Styles
+==================================================*/
+.install-field {
+	float: right;
+	clear: both;
+}
+
+.install-field input {
+	vertical-align: middle;
+}
+
+
+
+
+
+
+
+
+
+
+
+

@@ -41,7 +41,7 @@ $check = $ucvs->checkIP($reqIP);
 if($check != true)
 {
 	$ucvs->Log("Wrong IP requested UCVS! - IP: " . $reqIP);
-	echo 'Wrong IP!';
+	die('Wrong IP!');
 }
 else 
 {

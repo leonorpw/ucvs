@@ -20,7 +20,7 @@ class ucvsCore
 	///</summary>
 	public function __construct()
 	{
-		$this->config = new ucvsConfig();
+		$this->config = new userConfig();
 		
 		if($this->config->dbMode == 0)
 		{
@@ -42,7 +42,7 @@ class ucvsCore
 	///</summary>
 	private function rewardSilk($userID)
 	{
-		if(!empty($userID) && is_numeric($userID))
+		if(!empty($userID) && $userID != "" && is_numeric($userID))
 		{
 			$this->dbCon->execute("EXEC [{$this->config->dbName}].[CGI].[CGI_WebPurchaseSilk] @OrderID = N'VoteSystem', @UserID = {$this->dbCon->secure($userID)}, @PkgID = 0, @NumSilk = {$this->dbCon->secure($this->config->rewardAmount)}, @Price = 0");
 			return true;
@@ -59,7 +59,7 @@ class ucvsCore
 	///</summary>
 	private function rewardPoints($userID)
 	{
-		if(!empty($userID))
+		if(!empty($userID) && $userID != "")
 		{
 			$this->dbCon->execute("UPDATE {$this->config->tableName} SET {$this->config->pointColName} = {$this->config->pointColName} + {$this->config->rewardAmount} WHERE {$this->config->idColName} LIKE {$this->dbCon->secure($userID)}");
 			return true;
@@ -74,8 +74,10 @@ class ucvsCore
 	///Choose the right reward function, call it and return its return value
 	///Return values: Success => true | Failure => Error message
 	///</summary>
-	private function doReward($userID)
+	private function doReward($userID, $siteIP)
 	{
+		$this->updateDelay($userID, $siteIP);
+		
 		if($this->config->rewardMode == 0)
 		{
 			return $this->rewardSilk($userID);
@@ -103,21 +105,35 @@ class ucvsCore
 	}
 	
 	///<summary>
-	///Check if a given IP/User in a dataset voted during the last x hours on a given page
+	///Check if a given user in a dataset voted during the last x hours on a given toplist
 	///Return values: true | false
 	///</summary>
 	private function checkDelay(array $data, $siteIP)
 	{
-		//TODO
+		$user = $this->getUser($data);
+		$siteName = $this->getSite($siteIP);
+		$row = $this->dbCon->fetchArray("SELECT {$siteName} FROM UCVS_VoteLog WHERE UserID = {$user}");
+		if($row[$siteName] <= time())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	///<summary>
-	///Check if a given IP/User in a dataset voted during the last x hours on a given page
-	///Return values: true | false
+	///Update the cooldown for a given user on a given toplist
+	///Return values: none
 	///</summary>
-	private function updateDelay($userID, $userIP, $siteIP)
+	private function updateDelay(array $data, $siteIP)
 	{
-		//TODO
+		$user = $this->getUser($data);
+		$siteName = $this->getSite($siteIP);
+		$time = time() + (($this->config->rewardDelay * 60) * 60);
+		
+		$this->dbCon->execute("UPDATE UCVS_VoteLog SET {$siteName} = {$time} WHERE UserID = {$user}");
 	}
 	
 	///<summary>
@@ -126,65 +142,73 @@ class ucvsCore
 	///</summary>
 	public function procData(array $data, $siteIP)
 	{
-		//TODO: check/update delay table
-		switch($siteIP)
+		if($this->checkDelay($data, $siteIP))
 		{
-			case "199.59.161.214": //xtremetop100
-				$result = $this->doReward($data['custom']);
-			break;
-			
-			case "198.148.82.98": //gtop100
-				if(abs($data['Successful']) == 0)
-				{
-					$result = $this->doReward($data['pingUsername']);
-				}
-				else
-				{
-					$result = $data['Reason'];
-				}
-			break;
-			
-			case "104.24.15.11": //topg
-				$result = $this->doReward($data['p_resp']);
-			break;
-			
-			case "104.24.2.32": //top100arena
-				$result = $this->doReward($data['postback']);
-			break;
-			
-			case "198.20.70.235": //arena-top100
-				if($data['voted'] == 1)
-				{
-					$result = $this->doReward($data['userid']);
-				}
-				else
-				{
-					$result = "User " . $data['userid'] . " voted already today!" . PHP_EOL;
-				}
-			break;
-			case "193.70.3.149": //silkroad-servers
-				if($data['voted'] == 1)
-				{
-					$result = $this->doReward($data['userid']);
-				}
-				else
-				{
-					$result = "User " . $data['userid'] . " voted already today!" . PHP_EOL;
-				}
-			break;
-			case "193.70.3.149": //private-server				
-				if($data['voted'] == 1)
-				{
-					$result = $this->doReward($data['userid']);
-				}
-				else
-				{
-					$result = "User " . $data['userid'] . " voted already today!" . PHP_EOL;
-				}
-			break;
-			default:
-				$result = "Wrong IP called!";
-			break;
+			switch($siteIP)
+			{
+				case "199.59.161.214": //xtremetop100
+					$result = $this->doReward($data['custom']);
+				break;
+				
+				case "198.148.82.98": //gtop100
+					if(abs($data['Successful']) == 0)
+					{
+						$result = $this->doReward($data['pingUsername']);
+					}
+					else
+					{
+						$result = $data['Reason'];
+					}
+				break;
+				
+				case "104.24.15.11": //topg
+					$result = $this->doReward($data['p_resp']);
+				break;
+				
+				case "104.24.2.32": //top100arena
+					$result = $this->doReward($data['postback']);
+				break;
+				
+				case "198.20.70.235": //arena-top100
+					if($data['voted'] == 1)
+					{
+						$result = $this->doReward($data['userid']);
+					}
+					else
+					{
+						$result = "User " . $data['userid'] . " voted already today!" . PHP_EOL;
+					}
+				break;
+				
+				case "193.70.3.149": //silkroad-servers
+					if($data['voted'] == 1)
+					{
+						$result = $this->doReward($data['userid']);
+					}
+					else
+					{
+						$result = "User " . $data['userid'] . " voted already today!" . PHP_EOL;
+					}
+				break;
+				
+				case "79.137.80.26": //private-server				
+					if($data['voted'] == 1)
+					{
+						$result = $this->doReward($data['userid']);
+					}
+					else
+					{
+						$result = "User " . $data['userid'] . " voted already today!" . PHP_EOL;
+					}
+				break;
+				default:
+					$result = "Wrong IP called!";
+				break;
+			}
+		}
+		else
+		{
+			$result = "The user \"" . $this->getUser($data) . "\" voted already!";
 		}
 		
 		return $result;
@@ -246,13 +270,12 @@ class ucvsCore
 	///</summary>
 	public function Log($message)
 	{
-		
-			//error_log(date('[Y-m-d H:i] '). $message . PHP_EOL, 3, "ucvs.log");
-			//file_put_contents("ucvs.log", date('[Y-m-d H:i] ') . $message . "\n", FILE_APPEND) or print_r(error_get_last());
-			return @file_put_contents("logs/ucvs_" . date("Ymd") . ".log", 
-				"[" . date("H:i:s") . "] " . $message . "\r\n",
-				FILE_APPEND
-			);
+		//error_log(date('[Y-m-d H:i] '). $message . PHP_EOL, 3, "ucvs.log");
+		//file_put_contents("ucvs.log", date('[Y-m-d H:i] ') . $message . "\n", FILE_APPEND) or print_r(error_get_last());
+		return @file_put_contents("logs/ucvs_" . date("Ymd") . ".log", 
+			"[" . date("H:i:s") . "] " . $message . "\r\n",
+			FILE_APPEND
+		);
 		
 	}
 }

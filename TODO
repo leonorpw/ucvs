@@ -1,40 +1,26 @@
 TODO
-
-
-index.php
-
-	- Check if ucvs is installed else load install.php from /install/ 
-
 #########################################################
 
-/install/install.php
+/* index.php
+==================================================*/
 
-	-delete install.php after installation!
-	-create mysql DB
-
-
-#########################################################
-write conf file for DB login and tables
-
-inculde them to config.class.php
-
-//Database Mode - Choose which database management system you want to use
-//Possible values: 0 => mssql | 1 => mysql
-var $dbMode = 0;
-	
-var $dbHost = "";	//Database host address
-var $dbID = "";	//Username
-var $dbPW = "";	//Password
-var $dbName = "";	//Database Name (when using UCVS for Silkroad please use Account Database name e.g. SRO_VT_ACCOUNT)
+	+ Check if ucvs is installed else load install.php from /install/ 
 
 
-//Custom point system settings
-var $tableName = "";	//name of the table you store user info in
-var $idColName = "";	//name of the column you identify the user with
-var $pointColName = "";	//name of the column you store the points in
+/* classes/ucvs.class.php
+==================================================*/
 
-#########################################################
+	+ write checkDelay/updateDelay functions
+	+ add calls to checkDelay/updateDelay functions
 
-MSSQL DB
-	where i should save my Tables?
+/* install/install.php
+==================================================*/
+
+	+ write layout
+	- check if static var UCVS is defined, else send to index.php
+	- check if classes/userconfig.class.php is existing, if yes show warning and delete when saving settings
+	- write settings to classes/userconfig.class.php
+	- test sql settings
+	- create mysql/mssql tables
+
 
