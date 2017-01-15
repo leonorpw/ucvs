@@ -69,7 +69,7 @@ class cMSSQL
 	{
 		if($this->dbLink)
 		{
-			$this->dbSelected = mssql_select_db("[" . $dbName . "]", $this->dbLink) or die("Couldnt select database!" . PHP_EOL . mssql_get_last_message() . PHP_EOL);
+			$this->dbSelected = mssql_select_db("[" . $dbName . "]", $this->dbLink) or trigger_error("Couldnt select database!" . PHP_EOL . mssql_get_last_message() . PHP_EOL);
 		}
 		else
 		{

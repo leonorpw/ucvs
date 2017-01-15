@@ -69,7 +69,7 @@ class cMySQL
 	{
 		if($this->dbLink)
 		{
-			$this->dbSelected = mysql_select_db("[" . $dbName . "]", $this->dbLink) or die("Couldnt select database!" . PHP_EOL . mysql_error() . PHP_EOL);
+			$this->dbSelected = mysql_select_db("[" . $dbName . "]", $this->dbLink) or trigger_error("Couldnt select database!" . PHP_EOL . mysql_error() . PHP_EOL);
 		}
 		else
 		{

@@ -5,6 +5,7 @@ TODO
 ==================================================*/
 
 	+ Check if ucvs is installed else load install.php from /install/ 
+	+ allow re-installing (/index.php?do=install)
 
 
 /* classes/ucvs.class.php
@@ -13,14 +14,14 @@ TODO
 	+ write checkDelay/updateDelay functions
 	+ add calls to checkDelay/updateDelay functions
 
-/* install/install.php
+/* install.php
 ==================================================*/
 
 	+ write layout
-	- check if static var UCVS is defined, else send to index.php
-	- check if classes/userconfig.class.php is existing, if yes show warning and delete when saving settings
-	- write settings to classes/userconfig.class.php
-	- test sql settings
-	- create mysql/mssql tables
+	+ prevent direct loading of install.php (check if static var UCVS is defined, else send to index.php)
+	+ check if classes/userconfig.class.php is existing, if yes show warning and overwrite when saving settings
+	+ write settings to classes/userconfig.class.php
+	+ test sql settings
+	+ create mysql/mssql tables, drop if exists
 
 

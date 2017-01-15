@@ -5,8 +5,10 @@
 	/*		Written by LemoniscooL		   */
 	/*	 released under GPLv3 license	   */
 	/***************************************/
-	require_once "classes/config.class.php";
-	$config = new ucvsConfig();
+	error_reporting(E_ALL);
+	ini_set("display_errors", 1);
+	
+	define("UCVS", 1);
 ?>
 <html lang="en">
 	<head>
@@ -21,14 +23,21 @@
 			<img class="logo" src="images/logo.png"/>
 		</div>
 		
-		<? if(file_exists("./classes/userconfig.class.php")) { ?>
+		<?
+		if(!file_exists("./classes/userconfig.class.php") || (isset($_GET['do']) && $_GET['do'] == 'install'))
+		{
+			include_once("install.php");
+		}
+		else
+		{
+		?>
 			<div id="content">
 				<?
-					if(file_exists("./install/install.php"))
+					if(file_exists("install.php"))
 					{
 						?>
 						<div class="alert alert-error fade in">
-							<strong>Warning!</strong><br> The install folder is still existing, for security reasons you should delete it!
+							<strong>Warning!</strong><br> The install.php is still existing, for security reasons you should delete it!
 						</div>
 						<?
 					}
@@ -50,6 +59,6 @@
 					Silkroad-Servers.com Team
 				</p>
 			</div>
-		<? } else { include_once("./install/install.php"); } ?>
+		<? } ?>
 	</body>
 </html>
