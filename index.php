@@ -23,7 +23,7 @@
 			<img class="logo" src="images/logo.png"/>
 		</div>
 		
-		<?
+		<?php
 		if(!file_exists("./classes/userconfig.class.php") || (isset($_GET['do']) && $_GET['do'] == 'install'))
 		{
 			include_once("install.php");
@@ -32,14 +32,14 @@
 		{
 		?>
 			<div id="content">
-				<?
+				<?php
 					if(file_exists("install.php"))
 					{
 						?>
 						<div class="alert alert-error fade in">
 							<strong>Warning!</strong><br> The install.php is still existing, for security reasons you should delete it!
 						</div>
-						<?
+						<?php
 					}
 					
 					$url = "http".(!empty($_SERVER['HTTPS'])?"s":"")."://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']."ucvs_listener.php";
@@ -59,6 +59,6 @@
 					Silkroad-Servers.com Team
 				</p>
 			</div>
-		<? } ?>
+		<?php } ?>
 	</body>
 </html>

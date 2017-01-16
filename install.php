@@ -182,18 +182,18 @@
 		<h4>Database Settings</h4>
 		Database Management System:
 		<span class="install-field">
-			<input type="radio" id="dbms_mssql" name="dbms" value="0" <? if(isset($_POST['dbms']) && $error == true && $_POST['dbms'] == 0) { echo 'checked'; } else { echo 'checked'; } ?> /> <label for="dbms_mssql">MSSQL</label>
-			<input type="radio" id="dbms_mysql" name="dbms" value="1" <? if(isset($_POST['dbms']) && $error == true && $_POST['dbms'] == 1) { echo 'checked'; } ?> style="margin-left:20px;" /> <label for="dbms_mysql">MySQL</label>
+			<input type="radio" id="dbms_mssql" name="dbms" value="0" <?php if(isset($_POST['dbms']) && $error == true && $_POST['dbms'] == 0) { echo 'checked'; } else { echo 'checked'; } ?> /> <label for="dbms_mssql">MSSQL</label>
+			<input type="radio" id="dbms_mysql" name="dbms" value="1" <?php if(isset($_POST['dbms']) && $error == true && $_POST['dbms'] == 1) { echo 'checked'; } ?> style="margin-left:20px;" /> <label for="dbms_mysql">MySQL</label>
 		</span>
 		<br /><br />
 		Database Host:
 		<span class="install-field">
-			<input type="text" name="db_host" placeholder="127.0.0.1" <? if(isset($_POST['db_host']) && $error == true) { echo 'value="' . $_POST['db_host'] . '"'; } ?> />
+			<input type="text" name="db_host" placeholder="127.0.0.1" <?php if(isset($_POST['db_host']) && $error == true) { echo 'value="' . $_POST['db_host'] . '"'; } ?> />
 		</span>
 		<br /><br />
 		Database Username:
 		<span class="install-field">
-			<input type="text" name="db_user" placeholder="Username" <? if(isset($_POST['db_user']) && $error == true) { echo 'value="' . $_POST['db_user'] . '"'; } ?> />
+			<input type="text" name="db_user" placeholder="Username" <?php if(isset($_POST['db_user']) && $error == true) { echo 'value="' . $_POST['db_user'] . '"'; } ?> />
 		</span>
 		<br /><br />
 		Database Password:
@@ -203,7 +203,7 @@
 		<br /><br />
 		Database Name:
 		<span class="install-field">
-			<input type="text" name="db_name" placeholder="Database Name" <? if(isset($_POST['db_name']) && $error == true) { echo 'value="' . $_POST['db_name'] . '"'; } ?> />
+			<input type="text" name="db_name" placeholder="Database Name" <?php if(isset($_POST['db_name']) && $error == true) { echo 'value="' . $_POST['db_name'] . '"'; } ?> />
 		</span>
 		<br />
 		When using UCVS for Silkroad please use Account Database name e.g. SRO_VT_ACCOUNT
@@ -212,22 +212,22 @@
 		<h4>Reward Settings</h4>
 		Reward Mode:
 		<span class="install-field">
-			<input type="radio" id="reward_silk" name="rewardMode" value="0" <? if(isset($_POST['rewardMode']) && $error == true && $_POST['rewardMode'] == 0) { echo 'checked'; } else { echo 'checked'; } ?> /> <label for="reward_silk">Silk (Silkroad Only)</label>
-			<input type="radio" id="reward_points" name="rewardMode" value="1" <? if(isset($_POST['rewardMode']) && $error == true && $_POST['rewardMode'] == 1) { echo 'checked'; } ?> style="margin-left:20px;" /> <label for="reward_points">Custom point system</label>
+			<input type="radio" id="reward_silk" name="rewardMode" value="0" <?php if(isset($_POST['rewardMode']) && $error == true && $_POST['rewardMode'] == 0) { echo 'checked'; } else { echo 'checked'; } ?> /> <label for="reward_silk">Silk (Silkroad Only)</label>
+			<input type="radio" id="reward_points" name="rewardMode" value="1" <?php if(isset($_POST['rewardMode']) && $error == true && $_POST['rewardMode'] == 1) { echo 'checked'; } ?> style="margin-left:20px;" /> <label for="reward_points">Custom point system</label>
 		</span>
 		<br />
 		Choose the way you want to reward your users
 		<br /><br />
 		Reward Amount:
 		<span class="install-field">
-			<input type="text" name="reward_amount" placeholder="15" <? if(isset($_POST['reward_amount']) && $error == true) { echo 'value="' . $_POST['reward_amount'] . '"'; } ?> />
+			<input type="text" name="reward_amount" placeholder="15" <?php if(isset($_POST['reward_amount']) && $error == true) { echo 'value="' . $_POST['reward_amount'] . '"'; } ?> />
 		</span>
 		<br />
 		Choose how many points a user gets per valid vote
 		<br /><br />
 		Reward Delay:
 		<span class="install-field">
-			<input type="text" name="reward_delay" placeholder="12" <? if(isset($_POST['reward_delay']) && $error == true) { echo 'value="' . $_POST['reward_delay'] . '"'; } ?> />
+			<input type="text" name="reward_delay" placeholder="12" <?php if(isset($_POST['reward_delay']) && $error == true) { echo 'value="' . $_POST['reward_delay'] . '"'; } ?> />
 		</span>
 		<br />
 		Choose how long users have to wait before being rewarded again (hours)
@@ -237,21 +237,21 @@
 		<b>Please note: if you dont use a custom point system you can leave these fields empty!</b><br /><br />
 		Table Name:
 		<span class="install-field">
-			<input type="text" name="custom_table" placeholder="Table Name" <? if(isset($_POST['custom_table']) && $error == true) { echo 'value="' . $_POST['custom_table'] . '"'; } ?> />
+			<input type="text" name="custom_table" placeholder="Table Name" <?php if(isset($_POST['custom_table']) && $error == true) { echo 'value="' . $_POST['custom_table'] . '"'; } ?> />
 		</span>
 		<br />
 		Name of the table you store user info in
 		<br /><br />
 		ID Column:
 		<span class="install-field">
-			<input type="text" name="custom_idCol" placeholder="ID Column" <? if(isset($_POST['custom_idCol']) && $error == true) { echo 'value="' . $_POST['custom_idCol'] . '"'; } ?> />
+			<input type="text" name="custom_idCol" placeholder="ID Column" <?php if(isset($_POST['custom_idCol']) && $error == true) { echo 'value="' . $_POST['custom_idCol'] . '"'; } ?> />
 		</span>
 		<br />
 		Name of the column you identify the user with
 		<br /><br />
 		Point Column:
 		<span class="install-field">
-			<input type="text" name="custom_pointCol" placeholder="Point Column" <? if(isset($_POST['custom_pointCol']) && $error == true) { echo 'value="' . $_POST['custom_pointCol'] . '"'; } ?> />
+			<input type="text" name="custom_pointCol" placeholder="Point Column" <?php if(isset($_POST['custom_pointCol']) && $error == true) { echo 'value="' . $_POST['custom_pointCol'] . '"'; } ?> />
 		</span>
 		<br />
 		Name of the column you store the points in
