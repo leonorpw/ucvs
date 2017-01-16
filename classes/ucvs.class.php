@@ -26,7 +26,7 @@ class ucvsCore
 		{
 			$this->dbCon = cMSSQL::withDB($this->config->dbHost, $this->config->dbID, $this->config->dbPW, $this->config->dbName);
 		}
-		else if ($config->dbMode == 1)
+		else if ($this->config->dbMode == 1)
 		{
 			$this->dbCon = cMySQL::withDB($this->config->dbHost, $this->config->dbID, $this->config->dbPW, $this->config->dbName);
 		}

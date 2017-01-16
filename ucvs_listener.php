@@ -12,16 +12,16 @@
 /*=================================================================================*/
 
 //Uncomment to show all errors except notice and warnings
-//error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
+error_reporting(E_ALL);
 
 //in case no errors are shown uncomment this
-//ini_set("display_errors", 1);
+ini_set("display_errors", 1);
 
 require_once("classes/ucvs.class.php");
 
 $ucvs = new ucvsCore();
 
-//Check witch request method was used and create a reference
+//Check wich request method was used and create a reference
 switch($_SERVER['REQUEST_METHOD'])
 {
 	case 'GET':

@@ -158,7 +158,7 @@
 											 ALTER TABLE `UCVS_VoteLog`
 												ADD PRIMARY KEY (`UserID`);");
 						}
-						header("location:./");
+						//header("location:./");
 					}
 				}
 			}

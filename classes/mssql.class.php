@@ -146,8 +146,8 @@ class cMSSQL
 	///Fetch a result row as an associative array, a numeric array, or both
 	///Return values: Success => Array | Failure: Error Message
 	///</summary>
-	function fetchArray($result) {
-		$arr = mssql_fetch_array($result);
+	function fetchArray($sqlString) {
+		$arr = mssql_fetch_array($this->query($sqlString));
 		if(!$arr)
 		{
 			return "Error: " . mssql_get_last_message() . PHP_EOL;

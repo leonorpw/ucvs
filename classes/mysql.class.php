@@ -79,7 +79,7 @@ class cMySQL
 	
 	///<summary>
 	///Execute given SQL Command and return the result set. Used for SELECT, SHOW, DESCRIBE, EXPLAIN, etc.
-	///Return values: Success => MySQL-Result Set | Failure => Error Message
+	///Return values: Success => MySQL-Result Set | Failure => false
 	///</summary>
 	public function query($sqlString)
 	{
@@ -92,18 +92,20 @@ class cMySQL
 			}
 			else
 			{
-				return "Error: " . mysql_error() . PHP_EOL;
+				trigger_error("Error: " . mysql_error() . PHP_EOL);
+				return false;
 			}
 		}
 		else
 		{
-			return "Error: Not connected to a database server or database not selected!" . PHP_EOL;
+			trigger_error("Error: Not connected to a database server or database not selected!" . PHP_EOL);
+			return false;
 		}
 	}
 	
 	///<summary>
 	///Execute given SQL Command without returning any result sets. Used for INSERT, UPDATE, DELETE, DROP, etc.
-	///Return values: Success => True | Failure => Error Message
+	///Return values: Success => True | Failure => false
 	///</summary>
 	public function execute($sqlString)
 	{
@@ -116,18 +118,20 @@ class cMySQL
 			}
 			else
 			{
-				return "Error: " . mysql_error() . PHP_EOL;
+				trigger_error("Error: " . mysql_error() . PHP_EOL);
+				return false;
 			}
 		}
 		else
 		{
-			return "Error: Not connected to a database server or database not selected!" . PHP_EOL;
+			trigger_error("Error: Not connected to a database server or database not selected!" . PHP_EOL);
+			return false;
 		}
 	}
 	
 	///<summary>
 	///Execute given SQL command and return number of results.
-	///Return values: Success => Number of results | Failure => Error Message
+	///Return values: Success => Number of results | Failure => false
 	///</summary>
 	public function numRows($sqlString)
 	{
@@ -138,19 +142,21 @@ class cMySQL
 		}
 		else
 		{
-			return "Error: Not connected to a database server or database not selected!" . PHP_EOL;
+			trigger_error("Error: Not connected to a database server or database not selected!" . PHP_EOL);
+			return false;
 		}
 	}
 	
 	///<summary>
 	///Fetch a result row as an associative array, a numeric array, or both
-	///Return values: Success => Array | Failure: Error Message
+	///Return values: Success => Array | Failure: false
 	///</summary>
-	function fetchArray($result) {
-		$arr = mysql_fetch_array($result);
+	function fetchArray($sqlString) {
+		$arr = mysql_fetch_array($this->query($sqlString));
 		if(!$arr)
 		{
-			return "Error: " . mysql_error() . PHP_EOL;
+			trigger_error("Error: " . mysql_error() . PHP_EOL);
+			return false;
 		}
 		else
 		{
