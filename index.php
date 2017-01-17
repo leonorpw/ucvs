@@ -14,9 +14,9 @@
 	<head>
 		<meta charset="utf-8">
 		<title>UCVS - Unified Callback Vote Script</title>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
-		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" />
+		<link rel="stylesheet" href="css/style.css" />
 	</head>
 	<body>
 		<div id="header">
@@ -61,4 +61,5 @@
 			</div>
 		<?php } ?>
 	</body>
+	<script type="text/javascript" src="js/custom.js"></script>
 </html>

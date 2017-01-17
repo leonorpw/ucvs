@@ -87,6 +87,9 @@ body {
 	vertical-align: middle;
 }
 
+#cps_wrapper {
+	display: none;
+}
 
 
 

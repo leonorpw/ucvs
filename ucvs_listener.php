@@ -46,7 +46,7 @@ if($check != true)
 else 
 {
 	$result = $ucvs->procData($the_request, $reqIP);
-	if($result != true)
+	if($result !== true)
 	{
 		$ucvs->Log("Error while processing data: " . $result . " - User ID: " . $ucvs->getUser($the_request) . " Site: " . $ucvs->getSite($reqIP));
 		echo $result;

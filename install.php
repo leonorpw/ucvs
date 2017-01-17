@@ -10,8 +10,29 @@
 		header("location:./");
 	}
 	
-	require_once("classes/mssql.class.php");
-	require_once("classes/mysql.class.php");
+	if(function_exists("mssql_connect"))
+	{
+		require_once("classes/mssql.class.php");
+	}
+	else if(function_exists("sqlsrv_connect"))
+	{
+		require_once("classes/mssql.sqlsrv.class.php");
+	}
+	else
+	{
+		trigger_error("PHP extension for MSSQL (php_mssql for linux or sqlsrv for windows servers) is not installed, if you want to use UCVS with MSSQL you need to install one!");
+	}
+	
+	if(function_exists("mysqli_connect"))
+	{
+		require_once("classes/mysql.class.php");
+	}
+	else
+	{
+		trigger_error("PHP Extension for MySQL is not installed, if you want to use UCVS with MySQL you need to install it!");
+	}
+	
+	$error = false;
 ?>
 
 <div id="content">
@@ -124,39 +145,35 @@
 						if($_POST['dbms'] == 0) //MSSQL
 						{
 							$dbCon->execute("IF OBJECT_ID('dbo.UCVS_VoteLog', 'U') IS NOT NULL 
-												 DROP TABLE [dbo].[UCVS_VoteLog]
-											 GO
-											 CREATE TABLE [dbo].[UCVS_VoteLog](
-												 [UserID] [varchar](50) NOT NULL,
-												 [xtremetop100] [int] NULL,
-												 [arena-top100] [int] NULL,
-												 [gtop100] [int] NULL,
-												 [silkroad-servers] [int] NULL,
-												 [private-server] [int] NULL,
-												 [topg] [int] NULL,
-												 [top100arena] [int] NULL,
-											 CONSTRAINT [PK_UCVS_VoteLog] PRIMARY KEY CLUSTERED 
-											 (
-												 [UserID] ASC
-											 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-											 ) ON [PRIMARY]
-											 GO");
+																		DROP TABLE [dbo].[UCVS_VoteLog]");
+							$dbCon->execute("CREATE TABLE [dbo].[UCVS_VoteLog](
+														[UserID] [varchar](50) NOT NULL,
+														[xtremetop100] [int] NULL,
+														[arena-top100] [int] NULL,
+														[gtop100] [int] NULL,
+														[silkroad-servers] [int] NULL,
+														[private-server] [int] NULL,
+														[topg] [int] NULL,
+														[top100arena] [int] NULL,
+														CONSTRAINT [PK_UCVS_VoteLog] PRIMARY KEY CLUSTERED 
+														(
+															[UserID] ASC
+														) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+													) ON [PRIMARY]");
 						}
 						else //MySQL
 						{
-							$dbCon->execute("DROP TABLE IF EXISTS `UCVS_VoteLog`;
-											 CREATE TABLE `UCVS_VoteLog` (
-												`UserID` varchar(50) NOT NULL,
-												`xtremetop100` int(11) NULL,
-												`arena-top100` int(11) NULL,
-												`gtop100` int(11) NULL,
-												`silkroad-servers` int(11) NULL,
-												`private-server` int(11) NULL,
-												`topg` int(11) NULL,
-												`top100arena` int(11) NULL
-											 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-											 ALTER TABLE `UCVS_VoteLog`
-												ADD PRIMARY KEY (`UserID`);");
+							$dbCon->execute("DROP TABLE IF EXISTS UCVS_VoteLog");
+							$dbCon->execute("CREATE TABLE UCVS_VoteLog (
+															`UserID` VARCHAR(30) NOT NULL PRIMARY KEY,
+															`xtremetop100` INT(11),
+															`arena-top100` INT(11),
+															`gtop100` INT(11),
+															`silkroad-servers` INT(11),
+															`private-server` INT(11),
+															`topg` INT(11),
+															`top100arena` INT(11)
+														)");
 						}
 						//header("location:./");
 					}
@@ -212,8 +229,8 @@
 		<h4>Reward Settings</h4>
 		Reward Mode:
 		<span class="install-field">
-			<input type="radio" id="reward_silk" name="rewardMode" value="0" <?php if(isset($_POST['rewardMode']) && $error == true && $_POST['rewardMode'] == 0) { echo 'checked'; } else { echo 'checked'; } ?> /> <label for="reward_silk">Silk (Silkroad Only)</label>
-			<input type="radio" id="reward_points" name="rewardMode" value="1" <?php if(isset($_POST['rewardMode']) && $error == true && $_POST['rewardMode'] == 1) { echo 'checked'; } ?> style="margin-left:20px;" /> <label for="reward_points">Custom point system</label>
+			<input type="radio" id="reward_silk" name="rewardMode" onClick="cps_switch();" value="0" <?php if(isset($_POST['rewardMode']) && $error == true && $_POST['rewardMode'] == 0) { echo 'checked'; } else { echo 'checked'; } ?> /> <label for="reward_silk">Silk (Silkroad Only)</label>
+			<input type="radio" id="reward_points" name="rewardMode" onClick="cps_switch();" value="1" <?php if(isset($_POST['rewardMode']) && $error == true && $_POST['rewardMode'] == 1) { echo 'checked'; } ?> style="margin-left:20px;" /> <label for="reward_points">Custom point system</label>
 		</span>
 		<br />
 		Choose the way you want to reward your users
@@ -233,32 +250,34 @@
 		Choose how long users have to wait before being rewarded again (hours)
 		<br /><br />
 		
-		<h4>Custom Point System Settings</h4>
-		<b>Please note: if you dont use a custom point system you can leave these fields empty!</b><br /><br />
-		Table Name:
-		<span class="install-field">
-			<input type="text" name="custom_table" placeholder="Table Name" <?php if(isset($_POST['custom_table']) && $error == true) { echo 'value="' . $_POST['custom_table'] . '"'; } ?> />
-		</span>
-		<br />
-		Name of the table you store user info in
-		<br /><br />
-		ID Column:
-		<span class="install-field">
-			<input type="text" name="custom_idCol" placeholder="ID Column" <?php if(isset($_POST['custom_idCol']) && $error == true) { echo 'value="' . $_POST['custom_idCol'] . '"'; } ?> />
-		</span>
-		<br />
-		Name of the column you identify the user with
-		<br /><br />
-		Point Column:
-		<span class="install-field">
-			<input type="text" name="custom_pointCol" placeholder="Point Column" <?php if(isset($_POST['custom_pointCol']) && $error == true) { echo 'value="' . $_POST['custom_pointCol'] . '"'; } ?> />
-		</span>
-		<br />
-		Name of the column you store the points in
-		<br /><br />
-		<span class="install-field">
-			<input type="submit" name="submit" value="Submit" />
-		</span>
+		<div id="cps_wrapper">
+			<h4>Custom Point System Settings</h4>
+			<b>Please note: if you dont use a custom point system you can leave these fields empty!</b><br /><br />
+			Table Name:
+			<span class="install-field">
+				<input type="text" name="custom_table" placeholder="Table Name" <?php if(isset($_POST['custom_table']) && $error == true) { echo 'value="' . $_POST['custom_table'] . '"'; } ?> />
+			</span>
+			<br />
+			Name of the table you store user info in
+			<br /><br />
+			ID Column:
+			<span class="install-field">
+				<input type="text" name="custom_idCol" placeholder="ID Column" <?php if(isset($_POST['custom_idCol']) && $error == true) { echo 'value="' . $_POST['custom_idCol'] . '"'; } ?> />
+			</span>
+			<br />
+			Name of the column you identify the user with
+			<br /><br />
+			Point Column:
+			<span class="install-field">
+				<input type="text" name="custom_pointCol" placeholder="Point Column" <?php if(isset($_POST['custom_pointCol']) && $error == true) { echo 'value="' . $_POST['custom_pointCol'] . '"'; } ?> />
+			</span>
+			<br />
+			Name of the column you store the points in
+			<br /><br />
+			<span class="install-field">
+				<input type="submit" name="submit" value="Submit" />
+			</span>
+		</div>
 	</form>
 	<br /><br /><br /><br />
 </div>

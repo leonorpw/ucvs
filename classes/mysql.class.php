@@ -48,10 +48,10 @@ class cMySQL
 	{
 		if(!$this->dbLink)
 		{
-			$this->dbLink = mysql_connect($host, $id, $pw);
+			$this->dbLink = mysqli_connect($host, $id, $pw);
 			if(!$this->dbLink)
 			{
-				die("Couldn't connect to database!" . PHP_EOL . mysql_error() . PHP_EOL);
+				trigger_error("Couldn't connect to database!" . PHP_EOL . mysqli_error($this->dbLink) . PHP_EOL);
 			}
 		}
 		else
@@ -69,7 +69,7 @@ class cMySQL
 	{
 		if($this->dbLink)
 		{
-			$this->dbSelected = mysql_select_db("[" . $dbName . "]", $this->dbLink) or trigger_error("Couldnt select database!" . PHP_EOL . mysql_error() . PHP_EOL);
+			$this->dbSelected = mysqli_select_db($this->dbLink, $dbName) or trigger_error("Couldnt select database!" . PHP_EOL . mysqli_error($this->dbLink) . PHP_EOL);
 		}
 		else
 		{
@@ -85,14 +85,14 @@ class cMySQL
 	{
 		if($this->dbLink && $this->dbSelected)
 		{
-			$result = mysql_query($sqlString, $this->dbLink);
+			$result = mysqli_query($this->dbLink, $sqlString);
 			if($result)
 			{
 				return $result;
 			}
 			else
 			{
-				trigger_error("Error: " . mysql_error() . PHP_EOL);
+				trigger_error("Error: " . mysqli_error($this->dbLink) . PHP_EOL);
 				return false;
 			}
 		}
@@ -111,14 +111,14 @@ class cMySQL
 	{
 		if($this->dbLink && $this->dbSelected)
 		{
-			$result = mysql_query($sqlString, $this->dbLink);
+			$result = mysqli_query($this->dbLink, $sqlString);
 			if($result)
 			{
 				return true;
 			}
 			else
 			{
-				trigger_error("Error: " . mysql_error() . PHP_EOL);
+				trigger_error("Error: " . mysqli_error($this->dbLink) . PHP_EOL);
 				return false;
 			}
 		}
@@ -137,8 +137,10 @@ class cMySQL
 	{
 		if($this->dbLink && $this->dbSelected)
 		{
-			$result = mysql_query($sqlString, $this->dbLink);
-			return mysql_num_rows($result);
+			if($result = mysqli_query($this->dbLink, $sqlString))
+				return mysqli_num_rows($result);
+			else
+				return 0;
 		}
 		else
 		{
@@ -152,10 +154,10 @@ class cMySQL
 	///Return values: Success => Array | Failure: false
 	///</summary>
 	function fetchArray($sqlString) {
-		$arr = mysql_fetch_array($this->query($sqlString));
+		$arr = mysqli_fetch_array($this->query($sqlString));
 		if(!$arr)
 		{
-			trigger_error("Error: " . mysql_error() . PHP_EOL);
+			trigger_error("Error: " . mysqli_error($this->dbLink) . PHP_EOL);
 			return false;
 		}
 		else
@@ -188,7 +190,7 @@ class cMySQL
 		
 		$data = str_replace("'", "''", $data);
 		
-		return mysql_real_escape_string($data);
+		return mysqli_real_escape_string($data);
 	}
 	
 	///<summary>
@@ -197,7 +199,7 @@ class cMySQL
 	///</summary>
 	public function close()
 	{
-		mysql_close($this->dbLink);
+		mysqli_close($this->dbLink);
 	}
 }
 

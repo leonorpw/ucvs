@@ -8,7 +8,6 @@
 	class cMSSQL
 	{
 		var $dbLink;	//Stores the DB connection result set
-		var $dbSelected;	//Flag that signals wheather the Database was selected or not
 		
 		///<summary>
 		///Constructor being executed at object creation, initialize members.
@@ -17,7 +16,6 @@
 		public function __construct()
 		{
 			$dbLink = false;
-			$dbSelected = false;
 		}
 		
 		///<summary>
@@ -35,41 +33,41 @@
 		///</summary>
 		public static function withDB($host, $id, $pw, $db) {
 			$instance = new self();
-			$instance->connect($host, $id, $pw);
-			$instance->selectDB($db);
+			$instance->connect($host, $id, $pw, $db);
 			return $instance;
+		}
+		
+		///<summary>
+		///Get error messages and warnings about the last SQLSRV operation performed and return them in a readable way.
+		///Possible error levels: SQLSRV_ERR_ALL, SQLSRV_ERR_ERRORS, SQLSRV_ERR_WARNINGS
+		///Return values: Error message(s) from sqlsrv_errors()
+		///</summary>
+		private function getLastErrors($level = SQLSRV_ERR_ALL)
+		{
+			$errors = sqlsrv_errors($level);
+			$messages = "";
+			
+			foreach($errors as $error)
+			{
+				$messages .= "[" . $error['SQLSTATE'] . "] " . "[Code: " . $error['code'] . "] " . $error['message'] . PHP_EOL;
+			}
+			
+			return $messages;
 		}
 		
 		///<summary>
 		///Connect to the DB Server with given connection details
 		///Return values: none
 		///</summary>
-		private function connect($host, $id, $pw)
+		private function connect($host, $id, $pw, $db)
 		{
 			if(!$this->dbLink)
 			{
-				$this->dbLink = mssql_connect($host, $id, $pw);
+				$this->dbLink = sqlsrv_connect($host, array("Database" => $db, "UID"=>$id, "PWD"=>$pw));
 				if(!$this->dbLink)
 				{
-					trigger_error("Couldn't connect to database!" . PHP_EOL . mssql_get_last_message() . PHP_EOL);
+					trigger_error("Couldn't connect to database!" . PHP_EOL . $this->getLastErrors() . PHP_EOL);
 				}
-			}
-			else
-			{
-				exit;
-			}
-		}
-		
-		///<summary>
-		///Select database to use with this class, neccessery for this to work!
-		///[Optional]You can change the database used during runtime by calling this.
-		///Return values: none
-		///</summary>
-		public function selectDB($dbName)
-		{
-			if($this->dbLink)
-			{
-				$this->dbSelected = mssql_select_db("[" . $dbName . "]", $this->dbLink) or trigger_error("Couldnt select database!" . PHP_EOL . mssql_get_last_message() . PHP_EOL);
 			}
 			else
 			{
@@ -83,21 +81,21 @@
 		///</summary>
 		public function query($sqlString)
 		{
-			if($this->dbLink && $this->dbSelected)
+			if($this->dbLink)
 			{
-				$result = mssql_query($sqlString, $this->dbLink);
+				$result = sqlsrv_query($this->dbLink, $sqlString);
 				if($result)
 				{
 					return $result;
 				}
 				else
 				{
-					return "Error: " . mssql_get_last_message() . PHP_EOL;
+					return "Error: " . $this->getLastErrors() . PHP_EOL;
 				}
 			}
 			else
 			{
-				return "Error: Not connected to a database server or database not selected!" . PHP_EOL;
+				return "Error: Not connected to a database server!" . PHP_EOL;
 			}
 		}
 		
@@ -107,16 +105,16 @@
 		///</summary>
 		public function execute($sqlString)
 		{
-			if($this->dbLink && $this->dbSelected)
+			if($this->dbLink)
 			{
-				$result = mssql_query($sqlString, $this->dbLink);
+				$result = sqlsrv_query($this->dbLink, $sqlString);
 				if($result)
 				{
 					return true;
 				}
 				else
 				{
-					return "Error: " . mssql_get_last_message() . PHP_EOL;
+					return "Error: " . $this->getLastErrors() . PHP_EOL;
 				}
 			}
 			else
@@ -131,10 +129,10 @@
 		///</summary>
 		public function numRows($sqlString)
 		{
-			if($this->dbLink && $this->dbSelected)
+			if($this->dbLink)
 			{
-				$result = mssql_query($sqlString, $this->dbLink);
-				return mssql_num_rows($result);
+				$result = sqlsrv_query($this->dbLink, $sqlString);
+				return sqlsrv_num_rows($result);
 			}
 			else
 			{
@@ -147,10 +145,10 @@
 		///Return values: Success => Array | Failure: Error Message
 		///</summary>
 		function fetchArray($sqlString) {
-			$arr = mssql_fetch_array($this->query($sqlString));
+			$arr = sqlsrv_fetch_array($this->query($sqlString));
 			if(!$arr)
 			{
-				return "Error: " . mssql_get_last_message() . PHP_EOL;
+				return "Error: " . $this->getLastErrors() . PHP_EOL;
 			}
 			else
 			{
@@ -191,7 +189,7 @@
 		///</summary>
 		public function close()
 		{
-			mssql_close($this->dbLink);
+			sqlsrv_close($this->dbLink);
 		}
 	}
 

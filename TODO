@@ -25,3 +25,13 @@ TODO
 	+ create mysql/mssql tables, drop if exists
 
 
+/* classes/mssql.class.php & classes/mssql.sqlsrv.class.php
+==================================================*/
+
+	- use trigger_error to throw errors	
+	
+	
+/* js/custom.js
+==================================================*/
+
+	- fix hide/show function
