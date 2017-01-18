@@ -229,8 +229,8 @@
 		<h4>Reward Settings</h4>
 		Reward Mode:
 		<span class="install-field">
-			<input type="radio" id="reward_silk" name="rewardMode" onClick="cps_switch();" value="0" <?php if(isset($_POST['rewardMode']) && $error == true && $_POST['rewardMode'] == 0) { echo 'checked'; } else { echo 'checked'; } ?> /> <label for="reward_silk">Silk (Silkroad Only)</label>
-			<input type="radio" id="reward_points" name="rewardMode" onClick="cps_switch();" value="1" <?php if(isset($_POST['rewardMode']) && $error == true && $_POST['rewardMode'] == 1) { echo 'checked'; } ?> style="margin-left:20px;" /> <label for="reward_points">Custom point system</label>
+			<input type="radio" id="reward_silk" name="rewardMode" onClick="cps_hide();" value="0" <?php if(isset($_POST['rewardMode']) && $error == true && $_POST['rewardMode'] == 0) { echo 'checked'; } else { echo 'checked'; } ?> /> <label for="reward_silk">Silk (Silkroad Only)</label>
+			<input type="radio" id="reward_points" name="rewardMode" onClick="cps_show();" value="1" <?php if(isset($_POST['rewardMode']) && $error == true && $_POST['rewardMode'] == 1) { echo 'checked'; } ?> style="margin-left:20px;" /> <label for="reward_points">Custom point system</label>
 		</span>
 		<br />
 		Choose the way you want to reward your users
@@ -274,10 +274,10 @@
 			<br />
 			Name of the column you store the points in
 			<br /><br />
-			<span class="install-field">
-				<input type="submit" name="submit" value="Submit" />
-			</span>
 		</div>
+		<span class="install-field">
+			<input type="submit" name="submit" value="Submit" />
+		</span>
 	</form>
 	<br /><br /><br /><br />
 </div>

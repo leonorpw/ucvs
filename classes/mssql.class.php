@@ -51,7 +51,7 @@
 				$this->dbLink = mssql_connect($host, $id, $pw);
 				if(!$this->dbLink)
 				{
-					trigger_error("Couldn't connect to database!" . PHP_EOL . mssql_get_last_message() . PHP_EOL);
+					trigger_error("UCVS Error: Couldn't connect to database!" . PHP_EOL . mssql_get_last_message() . PHP_EOL);
 				}
 			}
 			else
@@ -69,7 +69,7 @@
 		{
 			if($this->dbLink)
 			{
-				$this->dbSelected = mssql_select_db("[" . $dbName . "]", $this->dbLink) or trigger_error("Couldnt select database!" . PHP_EOL . mssql_get_last_message() . PHP_EOL);
+				$this->dbSelected = mssql_select_db("[" . $dbName . "]", $this->dbLink) or trigger_error("UCVS Error: Couldnt select database!" . PHP_EOL . mssql_get_last_message() . PHP_EOL);
 			}
 			else
 			{
@@ -79,7 +79,7 @@
 		
 		///<summary>
 		///Execute given SQL Command and return the result set. Used for SELECT, SHOW, DESCRIBE, EXPLAIN, etc.
-		///Return values: Success => MSSQL-Result Set | Failure => Error Message
+		///Return values: Success => MSSQL-Result Set | Failure => false
 		///</summary>
 		public function query($sqlString)
 		{
@@ -92,18 +92,20 @@
 				}
 				else
 				{
-					return "Error: " . mssql_get_last_message() . PHP_EOL;
+					trigger_error("UCVS Error: " . mssql_get_last_message() . PHP_EOL);
+					return false;
 				}
 			}
 			else
 			{
-				return "Error: Not connected to a database server or database not selected!" . PHP_EOL;
+				trigger_error("UCVS Error: Not connected to a database server or database not selected!" . PHP_EOL);
+				return false;
 			}
 		}
 		
 		///<summary>
 		///Execute given SQL Command without returning any result sets. Used for INSERT, UPDATE, DELETE, DROP, etc.
-		///Return values: Success => True | Failure => Error Message
+		///Return values: Success => True | Failure => false
 		///</summary>
 		public function execute($sqlString)
 		{
@@ -116,18 +118,20 @@
 				}
 				else
 				{
-					return "Error: " . mssql_get_last_message() . PHP_EOL;
+					trigger_error("UCVS Error: " . mssql_get_last_message() . PHP_EOL);
+					return false;
 				}
 			}
 			else
 			{
-				return "Error: Not connected to a database server or database not selected!" . PHP_EOL;
+				trigger_error("UCVS rror: Not connected to a database server or database not selected!" . PHP_EOL);
+				return false;
 			}
 		}
 		
 		///<summary>
 		///Execute given SQL command and return number of results.
-		///Return values: Success => Number of results | Failure => Error Message
+		///Return values: Success => Number of results | Failure => false
 		///</summary>
 		public function numRows($sqlString)
 		{
@@ -138,7 +142,8 @@
 			}
 			else
 			{
-				return "Error: Not connected to a database server or database not selected!" . PHP_EOL;
+				trigger_error("UCVS Error: Not connected to a database server or database not selected!" . PHP_EOL);
+				return false;
 			}
 		}
 		
@@ -150,7 +155,8 @@
 			$arr = mssql_fetch_array($this->query($sqlString));
 			if(!$arr)
 			{
-				return "Error: " . mssql_get_last_message() . PHP_EOL;
+				trigger_error("UCVS Error: " . mssql_get_last_message() . PHP_EOL);
+				return false;
 			}
 			else
 			{

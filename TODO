@@ -6,6 +6,7 @@ TODO
 
 	+ Check if ucvs is installed else load install.php from /install/ 
 	+ allow re-installing (/index.php?do=install)
+	+ fix URL generation (/index.php)
 
 
 /* classes/ucvs.class.php
@@ -28,10 +29,10 @@ TODO
 /* classes/mssql.class.php & classes/mssql.sqlsrv.class.php
 ==================================================*/
 
-	- use trigger_error to throw errors	
+	+ use trigger_error to throw errors	
 	
 	
 /* js/custom.js
 ==================================================*/
 
-	- fix hide/show function
+	+ fix hide/show function

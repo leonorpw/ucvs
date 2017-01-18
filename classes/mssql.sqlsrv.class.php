@@ -66,7 +66,7 @@
 				$this->dbLink = sqlsrv_connect($host, array("Database" => $db, "UID"=>$id, "PWD"=>$pw));
 				if(!$this->dbLink)
 				{
-					trigger_error("Couldn't connect to database!" . PHP_EOL . $this->getLastErrors() . PHP_EOL);
+					trigger_error("UCVS Error: Couldn't connect to database!" . PHP_EOL . $this->getLastErrors() . PHP_EOL);
 				}
 			}
 			else
@@ -90,12 +90,14 @@
 				}
 				else
 				{
-					return "Error: " . $this->getLastErrors() . PHP_EOL;
+					trigger_error("UCVS Error: " . $this->getLastErrors() . PHP_EOL);
+					return false;
 				}
 			}
 			else
 			{
-				return "Error: Not connected to a database server!" . PHP_EOL;
+				trigger_error("UCVS Error: Not connected to a database server!" . PHP_EOL);
+				return false;
 			}
 		}
 		
@@ -114,12 +116,14 @@
 				}
 				else
 				{
-					return "Error: " . $this->getLastErrors() . PHP_EOL;
+					trigger_error("UCVS Error: " . $this->getLastErrors() . PHP_EOL);
+					return false;
 				}
 			}
 			else
 			{
-				return "Error: Not connected to a database server or database not selected!" . PHP_EOL;
+				trigger_error("UCVS Error: Not connected to a database server!" . PHP_EOL);
+				return false;
 			}
 		}
 		
@@ -136,7 +140,8 @@
 			}
 			else
 			{
-				return "Error: Not connected to a database server or database not selected!" . PHP_EOL;
+				trigger_error("Error: Not connected to a database server!" . PHP_EOL);
+				return false;
 			}
 		}
 		
@@ -146,9 +151,10 @@
 		///</summary>
 		function fetchArray($sqlString) {
 			$arr = sqlsrv_fetch_array($this->query($sqlString));
-			if(!$arr)
+			if($arr === false)
 			{
-				return "Error: " . $this->getLastErrors() . PHP_EOL;
+				trigger_error("Error: " . $this->getLastErrors() . PHP_EOL);
+				return false;
 			}
 			else
 			{

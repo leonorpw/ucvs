@@ -43,6 +43,7 @@
 					}
 					
 					$url = "http".(!empty($_SERVER['HTTPS'])?"s":"")."://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']."ucvs_listener.php";
+					$url = str_replace("index.php", "", $url);
 				?>
 				<h2>Welcome to UCVS - Unified Callback Vote Script</h2>
 				<div class="divider"><span></span></div>

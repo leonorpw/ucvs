@@ -227,16 +227,6 @@
 							$result = "User " . $data['userid'] . " voted already today!" . PHP_EOL;
 						}
 					break;
-					case "127.0.0.1":
-						if($data['voted'] == 1)
-						{
-							$result = $this->doReward($data['userid'], $siteIP);
-						}
-						else
-						{
-							$result = "User " . $data['userid'] . " voted already today!" . PHP_EOL;
-						}
-					break;
 					default:
 						$result = "Wrong IP called!";
 					break;
