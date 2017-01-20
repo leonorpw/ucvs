@@ -5,28 +5,44 @@
 	/*	 released under GPLv3 license	   */
 	/***************************************/
 
+	
 	require_once("config.class.php");
-
-	if(function_exists("mssql_connect"))
+	require_once("log.class.php");
+	
+	$cfgTemp = new userConfig();
+	
+	if($cfgTemp->dbMode == 0)
 	{
-		require_once("mssql.class.php");
+		if(function_exists("mssql_connect"))
+		{
+			require_once("mssql.class.php");
+		}
+		else if(function_exists("sqlsrv_connect"))
+		{
+			require_once("mssql.sqlsrv.class.php");
+		}
+		else
+		{
+			trigger_error("UCVS Error: No PHP Extension for MSSQL is installed! If you want to use UCVS with MSSQL you need to install either php_mssql for linux or sqlsrv for windows servers!");
+			cLog::ErrorLog("UCVS Error: No PHP Extension for MSSQL is installed! If you want to use UCVS with MSSQL you need to install either php_mssql for linux or sqlsrv for windows servers!");
+		}
 	}
-	else if(function_exists("sqlsrv_connect"))
+	else if($cfgTemp->dbMode == 1)
 	{
-		require_once("mssql.sqlsrv.class.php");
+		if(function_exists("mysqli_connect"))
+		{
+			require_once("mysql.class.php");
+		}
+		else
+		{
+			trigger_error("UCVS Error: No PHP Extension for MySQL is installed! If you want to use UCVS with MySQL you need to install php_mysqli!");
+			cLog::ErrorLog("UCVS Error: No PHP Extension for MySQL is installed! If you want to use UCVS with MySQL you need to install php_mysqli!");
+		}
 	}
 	else
 	{
-		trigger_error("PHP extension for MSSQL (php_mssql for linux or sqlsrv for windows servers) is not installed, if you want to use UCVS with MSSQL you need to install one!");
-	}
-
-	if(function_exists("mysqli_connect"))
-	{
-		require_once("mysql.class.php");
-	}
-	else
-	{
-		trigger_error("PHP Extension for MySQL is not installed, if you want to use UCVS with MySQL you need to install it!");
+		cLog::ErrorLog("UCVS Error: You have an error in your UCVS config file, please check database settings!");
+		die("You have an error in your UCVS config file, please check database settings!" . PHP_EOL);
 	}
 
 	class ucvsCore
@@ -50,10 +66,6 @@
 			{
 				$this->dbCon = cMySQL::withDB($this->config->dbHost, $this->config->dbID, $this->config->dbPW, $this->config->dbName);
 			}
-			else
-			{
-				die("You have an error in your UCVS config file, please check database settings!" . PHP_EOL);
-			}
 		}
 		
 		///<summary>
@@ -69,6 +81,7 @@
 			}
 			else
 			{
+				cLog::ErrorLog("UCVS Error: Something is wrong with the user ID! Its either empty or not numeric. For alphanumeric user IDs please use custom point system!");
 				return "Error: Something is wrong with the user ID! Its either empty or not numeric." . PHP_EOL . "For alphanumeric user IDs please use custom point system!" . PHP_EOL;
 			}
 		}
@@ -86,6 +99,7 @@
 			}
 			else
 			{
+				cLog::ErrorLog("UCVS Error: User ID is empty!");
 				return "Error: User ID is empty!" . PHP_EOL;
 			}
 		}
@@ -279,21 +293,6 @@
 		public function getSite($ip)
 		{
 			return array_search($ip, $this->config->whitelist);
-		}
-		
-		///<summary>
-		///Log a given message if logging is activated
-		///Return values: Success => number of bytes written | Failure => false
-		///</summary>
-		public function Log($message)
-		{
-			//error_log(date('[Y-m-d H:i] '). $message . PHP_EOL, 3, "ucvs.log");
-			//file_put_contents("ucvs.log", date('[Y-m-d H:i] ') . $message . "\n", FILE_APPEND) or print_r(error_get_last());
-			return @file_put_contents("logs/ucvs_" . date("Ymd") . ".log", 
-				"[" . date("H:i:s") . "] " . $message . "\r\n",
-				FILE_APPEND
-			);
-			
 		}
 	}
 

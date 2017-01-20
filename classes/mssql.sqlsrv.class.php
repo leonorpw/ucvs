@@ -1,8 +1,8 @@
 <?php
 	/***************************************/
-	/* UCVS - Unified Callback Vote Script 				 */
-	/*		Written by LemoniscooL		   					 */
-	/*	 released under GPLv3 license	  						 */
+	/* UCVS - Unified Callback Vote Script */
+	/*		Written by LemoniscooL		   */
+	/*	 released under GPLv3 license	   */
 	/***************************************/
 
 	class cMSSQL
@@ -66,7 +66,8 @@
 				$this->dbLink = sqlsrv_connect($host, array("Database" => $db, "UID"=>$id, "PWD"=>$pw));
 				if(!$this->dbLink)
 				{
-					trigger_error("UCVS Error: Couldn't connect to database!" . PHP_EOL . $this->getLastErrors() . PHP_EOL);
+					trigger_error("SQLSRV Error: Couldn't connect to database!" . PHP_EOL . $this->getLastErrors() . PHP_EOL);
+					cLog::ErrorLog("SQLSRV Error: Couldn't connect to database!" . PHP_EOL . "\t" . $this->getLastErrors());
 				}
 			}
 			else
@@ -90,13 +91,15 @@
 				}
 				else
 				{
-					trigger_error("UCVS Error: " . $this->getLastErrors() . PHP_EOL);
+					trigger_error("SQLSRV Error: " . $this->getLastErrors() . PHP_EOL);
+					cLog::ErrorLog("SQLSRV Error: " . $this->getLastErrors());
 					return false;
 				}
 			}
 			else
 			{
-				trigger_error("UCVS Error: Not connected to a database server!" . PHP_EOL);
+				trigger_error("SQLSRV Error: Not connected to a database server!" . PHP_EOL);
+				cLog::ErrorLog("SQLSRV Error: Not connected to a database server!");
 				return false;
 			}
 		}
@@ -116,13 +119,15 @@
 				}
 				else
 				{
-					trigger_error("UCVS Error: " . $this->getLastErrors() . PHP_EOL);
+					trigger_error("SQLSRV Error: " . $this->getLastErrors() . PHP_EOL);
+					cLog::ErrorLog("SQLSRV Error: " . $this->getLastErrors() . PHP_EOL);
 					return false;
 				}
 			}
 			else
 			{
-				trigger_error("UCVS Error: Not connected to a database server!" . PHP_EOL);
+				trigger_error("SQLSRV Error: Not connected to a database server!" . PHP_EOL);
+				cLog::ErrorLog("SQLSRV Error: Not connected to a database server!");
 				return false;
 			}
 		}
@@ -140,7 +145,8 @@
 			}
 			else
 			{
-				trigger_error("Error: Not connected to a database server!" . PHP_EOL);
+				trigger_error("SQLSRV Error: Not connected to a database server!" . PHP_EOL);
+				cLog::ErrorLog("SQLSRV Error: Not connected to a database server!");
 				return false;
 			}
 		}
@@ -153,7 +159,8 @@
 			$arr = sqlsrv_fetch_array($this->query($sqlString));
 			if($arr === false)
 			{
-				trigger_error("Error: " . $this->getLastErrors() . PHP_EOL);
+				trigger_error("SQLSRV Error: " . $this->getLastErrors() . PHP_EOL);
+				cLog::ErrorLog("SQLSRV Error: " . $this->getLastErrors());
 				return false;
 			}
 			else

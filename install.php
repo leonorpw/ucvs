@@ -9,6 +9,7 @@
 	{
 		header("location:./");
 	}
+	require_once("log.class.php");
 	
 	if(function_exists("mssql_connect"))
 	{
@@ -21,6 +22,7 @@
 	else
 	{
 		trigger_error("PHP extension for MSSQL (php_mssql for linux or sqlsrv for windows servers) is not installed, if you want to use UCVS with MSSQL you need to install one!");
+		cLog::ErrorLog("Installation Error: PHP extension for MSSQL (php_mssql for linux or sqlsrv for windows servers) is not installed, if you want to use UCVS with MSSQL you need to install one!");
 	}
 	
 	if(function_exists("mysqli_connect"))
@@ -30,6 +32,7 @@
 	else
 	{
 		trigger_error("PHP Extension for MySQL is not installed, if you want to use UCVS with MySQL you need to install it!");
+		cLog::ErrorLog("Installation Error: PHP Extension for MySQL is not installed, if you want to use UCVS with MySQL you need to install it!");
 	}
 	
 	$error = false;

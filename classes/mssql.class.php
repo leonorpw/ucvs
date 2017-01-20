@@ -1,8 +1,8 @@
 <?php
 	/***************************************/
-	/* UCVS - Unified Callback Vote Script 				 */
-	/*		Written by LemoniscooL		   					 */
-	/*	 released under GPLv3 license	  						 */
+	/* UCVS - Unified Callback Vote Script */
+	/*		Written by LemoniscooL		   */
+	/*	 released under GPLv3 license	   */
 	/***************************************/
 
 	class cMSSQL
@@ -51,7 +51,8 @@
 				$this->dbLink = mssql_connect($host, $id, $pw);
 				if(!$this->dbLink)
 				{
-					trigger_error("UCVS Error: Couldn't connect to database!" . PHP_EOL . mssql_get_last_message() . PHP_EOL);
+					trigger_error("MSSQL Error: Couldn't connect to database! Check your database settings." . PHP_EOL);
+					cLog::ErrorLog("MSSQL Error: Couldn't connect to database! Check your database settings.");
 				}
 			}
 			else
@@ -69,7 +70,12 @@
 		{
 			if($this->dbLink)
 			{
-				$this->dbSelected = mssql_select_db("[" . $dbName . "]", $this->dbLink) or trigger_error("UCVS Error: Couldnt select database!" . PHP_EOL . mssql_get_last_message() . PHP_EOL);
+				$this->dbSelected = mssql_select_db("[" . $dbName . "]", $this->dbLink) 
+				if(!$this->dbSelected)
+				{
+					trigger_error("MSSQL Error: Couldnt select database!" . PHP_EOL . mssql_get_last_message() . PHP_EOL);
+					cLog::ErrorLog("MSSQL Error: Couldnt select database!" . PHP_EOL . "\t". mssql_get_last_message());
+				}
 			}
 			else
 			{
@@ -92,13 +98,15 @@
 				}
 				else
 				{
-					trigger_error("UCVS Error: " . mssql_get_last_message() . PHP_EOL);
+					trigger_error("MSSQL Error: " . mssql_get_last_message() . PHP_EOL);
+					cLog::ErrorLog("MSSQL Error: " . mssql_get_last_message());
 					return false;
 				}
 			}
 			else
 			{
-				trigger_error("UCVS Error: Not connected to a database server or database not selected!" . PHP_EOL);
+				trigger_error("MSSQL Error: Not connected to a database server or database not selected!" . PHP_EOL);
+				cLog::ErrorLog("MSSQL Error: Not connected to a database server or database not selected!");
 				return false;
 			}
 		}
@@ -118,13 +126,15 @@
 				}
 				else
 				{
-					trigger_error("UCVS Error: " . mssql_get_last_message() . PHP_EOL);
+					trigger_error("MSSQL Error: " . mssql_get_last_message() . PHP_EOL);
+					cLog::ErrorLog("MSSQL Error: " . mssql_get_last_message());
 					return false;
 				}
 			}
 			else
 			{
-				trigger_error("UCVS rror: Not connected to a database server or database not selected!" . PHP_EOL);
+				trigger_error("MSSQL rror: Not connected to a database server or database not selected!" . PHP_EOL);
+				cLog::ErrorLog("MSSQL rror: Not connected to a database server or database not selected!");
 				return false;
 			}
 		}
@@ -142,7 +152,8 @@
 			}
 			else
 			{
-				trigger_error("UCVS Error: Not connected to a database server or database not selected!" . PHP_EOL);
+				trigger_error("MSSQL Error: Not connected to a database server or database not selected!" . PHP_EOL);
+				cLog::ErrorLog("MSSQL Error: Not connected to a database server or database not selected!");
 				return false;
 			}
 		}
@@ -155,7 +166,8 @@
 			$arr = mssql_fetch_array($this->query($sqlString));
 			if(!$arr)
 			{
-				trigger_error("UCVS Error: " . mssql_get_last_message() . PHP_EOL);
+				trigger_error("MSSQL Error: " . mssql_get_last_message() . PHP_EOL);
+				cLog::ErrorLog("MSSQL Error: " . mssql_get_last_message());
 				return false;
 			}
 			else
