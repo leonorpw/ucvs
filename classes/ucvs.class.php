@@ -44,6 +44,8 @@
 		cLog::ErrorLog("UCVS Error: You have an error in your UCVS config file, please check database settings!");
 		die("You have an error in your UCVS config file, please check database settings!" . PHP_EOL);
 	}
+	
+	unset($cfgTemp);
 
 	class ucvsCore
 	{
@@ -146,7 +148,15 @@
 		{
 			$user = $this->getUser($data);
 			$siteName = $this->getSite($siteIP);
-			$sql = "SELECT {$siteName} FROM UCVS_VoteLog WHERE UserID = '{$user}'";
+			
+			if($this->config->dbMode == 0) //MSSQL
+			{
+				$sql = "SELECT [{$siteName}] FROM UCVS_VoteLog WHERE UserID = {$user}";
+			}
+			else if($this->config->dbMode == 1) //MySQL
+			{
+				$sql = "SELECT `{$siteName}` FROM UCVS_VoteLog WHERE UserID = '{$user}'";
+			}
 			
 			if($numRows = $this->dbCon->numRows($sql) == 0)
 			{
