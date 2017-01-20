@@ -5,8 +5,13 @@
 	/*		Written by LemoniscooL		   */
 	/*	 released under GPLv3 license	   */
 	/***************************************/
-	error_reporting(E_ALL);
-	ini_set("display_errors", 1);
+	
+	
+	//Uncomment to show all errors
+	//error_reporting(E_ALL);
+
+	//in case no errors are shown uncomment this
+	//ini_set("display_errors", 1);
 	
 	define("UCVS", 1);
 ?>
