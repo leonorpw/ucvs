@@ -183,7 +183,16 @@
 			$siteName = $this->getSite($siteIP);
 			$time = time() + (($this->config->rewardDelay * 60) * 60);
 
-			$this->dbCon->execute("UPDATE UCVS_VoteLog SET {$siteName} = '{$time}' WHERE UserID = '{$user}'");
+			if($this->config->dbMode == 0) //MSSQL
+			{
+				$sql = "UPDATE UCVS_VoteLog SET [{$siteName}] = '{$time}' WHERE UserID = '{$user}'";
+			}
+			else if($this->config->dbMode == 1) //MySQL
+			{
+				$sql = "UPDATE UCVS_VoteLog SET `{$siteName}` = '{$time}' WHERE UserID = '{$user}'";
+			}
+			
+			$this->dbCon->execute($sql);
 		}
 		
 		///<summary>
