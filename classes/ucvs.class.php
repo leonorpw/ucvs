@@ -158,7 +158,7 @@
 				$sql = "SELECT `{$siteName}` FROM UCVS_VoteLog WHERE UserID = '{$user}'";
 			}
 			
-			if($numRows = $this->dbCon->numRows($sql) == 0)
+			if($this->dbCon->numRows($sql) == 0)
 			{
 				$this->dbCon->execute("INSERT INTO UCVS_VoteLog (UserID) VALUES ('{$user}')");
 			}
