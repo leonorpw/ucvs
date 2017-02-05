@@ -9,7 +9,7 @@
 	{
 		header("location:./");
 	}
-	require_once("log.class.php");
+	require_once("classes/log.class.php");
 	
 	if(function_exists("mssql_connect"))
 	{
