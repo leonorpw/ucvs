@@ -92,7 +92,7 @@
 				else
 				{
 					trigger_error("SQLSRV Error: " . $this->getLastErrors() . PHP_EOL);
-					cLog::ErrorLog("SQLSRV Error: " . $this->getLastErrors());
+					cLog::ErrorLog("SQLSRV Error: " . $this->getLastErrors() . PHP_EOL . $sqlString);
 					return false;
 				}
 			}
@@ -120,7 +120,7 @@
 				else
 				{
 					trigger_error("SQLSRV Error: " . $this->getLastErrors() . PHP_EOL);
-					cLog::ErrorLog("SQLSRV Error: " . $this->getLastErrors() . PHP_EOL);
+					cLog::ErrorLog("SQLSRV Error: " . $this->getLastErrors() . PHP_EOL . $sqlString);
 					return false;
 				}
 			}
@@ -160,7 +160,7 @@
 			if($arr === false)
 			{
 				trigger_error("SQLSRV Error: " . $this->getLastErrors() . PHP_EOL);
-				cLog::ErrorLog("SQLSRV Error: " . $this->getLastErrors());
+				cLog::ErrorLog("SQLSRV Error: " . $this->getLastErrors() . PHP_EOL . $sqlString);
 				return false;
 			}
 			else

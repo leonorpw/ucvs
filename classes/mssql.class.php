@@ -70,7 +70,7 @@
 		{
 			if($this->dbLink)
 			{
-				$this->dbSelected = mssql_select_db("[" . $dbName . "]", $this->dbLink) 
+				$this->dbSelected = mssql_select_db("[" . $dbName . "]", $this->dbLink);
 				if(!$this->dbSelected)
 				{
 					trigger_error("MSSQL Error: Couldnt select database!" . PHP_EOL . mssql_get_last_message() . PHP_EOL);
