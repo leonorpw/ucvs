@@ -228,7 +228,7 @@
 						$result = $this->doReward($data['postback'], $siteIP);
 					break;
 					
-					case "198.20.70.235": //arena-top100
+					case "198.20.70.234": //arena-top100
 						if($data['voted'] == 1)
 						{
 							$result = $this->doReward($data['userid'], $siteIP);

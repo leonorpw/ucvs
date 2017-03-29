@@ -15,7 +15,7 @@
 		//!!!!Do NOT change this list unless you know what you are doing!!!!
 		var $whitelist = Array(
 			"xtremetop100" => "199.59.161.214",
-			"arena-top100" => "198.20.70.235",
+			"arena-top100" => "198.20.70.234",
 			"gtop100" => "198.148.82.98",
 			"silkroad-servers" => "193.70.3.149",
 			"private-server" => "79.137.80.26",
