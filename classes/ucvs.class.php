@@ -228,17 +228,6 @@
 						$result = $this->doReward($data['postback'], $siteIP);
 					break;
 					
-					case "184.154.46.75": //arena-top100
-						if($data['voted'] == 1)
-						{
-							$result = $this->doReward($data['userid'], $siteIP);
-						}
-						else
-						{
-							$result = "User " . $data['userid'] . " voted already today!" . PHP_EOL;
-						}
-					break;
-					
 					case "184.154.46.76": //arena-top100
 						if($data['voted'] == 1)
 						{
