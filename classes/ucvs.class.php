@@ -209,7 +209,7 @@
 						$result = $this->doReward($data['custom'], $siteIP);
 					break;
 					
-					case "198.148.82.98": //gtop100
+					case "198.148.82.99": //gtop100
 						if(abs($data['Successful']) == 0)
 						{
 							$result = $this->doReward($data['pingUsername'], $siteIP);
@@ -220,11 +220,11 @@
 						}
 					break;
 					
-					case "104.24.15.11": //topg
+					case "192.99.101.31": //topg
 						$result = $this->doReward($data['p_resp'], $siteIP);
 					break;
 					
-					case "104.24.2.32": //top100arena
+					case "209.59.143.11": //top100arena
 						$result = $this->doReward($data['postback'], $siteIP);
 					break;
 					
