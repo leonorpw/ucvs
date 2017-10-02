@@ -130,7 +130,7 @@
 		///</summary>
 		public function checkIP($ip)
 		{
-			if(in_array($ip, $this->config->whitelist))
+			if($this->isInArray($ip, $this->config->whitelist))
 			{
 				return true;
 			}
@@ -210,6 +210,7 @@
 					break;
 					
 					case "198.148.82.98": //gtop100
+					case "198.148.82.99": //gtop100
 						if(abs($data['Successful']) == 0)
 						{
 							$result = $this->doReward($data['pingUsername'], $siteIP);
@@ -311,7 +312,30 @@
 		///</summary>
 		public function getSite($ip)
 		{
-			return array_search($ip, $this->config->whitelist);
+			return $this->config->whitelist[$ip];
+		}
+		
+		///<summary>
+		///Extended version of in_array, searches the $needle in the value aswell as the key of $haystack
+		///If the third parameter strict is set to TRUE then the function will search for identical elements in the $haystack. This means it will also perform a type comparison of the $needle in the $haystack.
+		///Return values: Success => true | Failure => false
+		///</summary>
+		function isInArray($needle, $haystack, $strict = false)
+		{
+			foreach($haystack as $key => $value)
+			{
+				if($strict)
+				{
+					if($key === $needle || $value === $needle)
+						return true;
+				}
+				else
+				{
+					if($key == $needle || $value == $needle)
+						return true;
+				}
+			}
+			return false;
 		}
 	}
 

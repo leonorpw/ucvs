@@ -39,6 +39,10 @@ Usefull Tips:
     The comments for every setting should explain everything you need to know.
  - If you want to use the Silk reward system (Silkroad Online Servers only), you should first check if you have the dbo.CGI_WebPurchaseSilk stored procedure fixed or not!
     If you didn't, you can find the query used to do so in /UCVS/fixes/CGI_WebPurchaseSilk.sql
+
+
+Troubleshooting:
+ - When using top100arena.com you have to append "?postback=" to your "Incentive Postback"-URL in the Server Settings. 
  
  
 FAQ:
