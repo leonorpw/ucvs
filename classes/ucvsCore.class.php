@@ -220,6 +220,11 @@
 							$result = "User " . $data['userid'] . " voted already today!" . PHP_EOL;
 						}
 					break;
+					
+					case "185.176.40.63": //gamestop100
+						$result = $this->doReward($data['custom'], $siteIP);
+					break;
+					
 					default:
 						$result = "Wrong IP called!";
 					break;

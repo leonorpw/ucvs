@@ -18,7 +18,7 @@
 
 <div id="content">
 	<?php
-		if(file_exists("classes/userconfig.class.php"))
+		if(file_exists("classes/userConfig.class.php"))
 		{
 			echo '<div class="alert fade in">';
 				echo '<strong>Warning!</strong><br> UCVS was already installed! Reinstalling will drop all user data in UCVS_VoteLog table and overwrite all settings!';
@@ -113,7 +113,7 @@
 					$configContent .= "" . "\r\n";
 					$configContent .= "?>" . "\r\n\r\n";
 					
-					if(!file_put_contents("classes/userconfig.class.php", $configContent))
+					if(!file_put_contents("classes/userConfig.class.php", $configContent))
 					{
 						echo '<div class="alert alert-error fade in">';
 							echo '<strong>Error!</strong><br> Couldn\'t write config file, check folder permissions (chmod)!';
@@ -136,6 +136,7 @@
 														[private-server] [int] NULL,
 														[topg] [int] NULL,
 														[top100arena] [int] NULL,
+														[gamestop100] [int] NULL,
 														CONSTRAINT [PK_UCVS_VoteLog] PRIMARY KEY CLUSTERED 
 														(
 															[UserID] ASC
@@ -153,10 +154,11 @@
 															`silkroad-servers` INT(11),
 															`private-server` INT(11),
 															`topg` INT(11),
+															`gamestop100` INT(11),
 															`top100arena` INT(11)
 														)");
 						}
-						//header("location:./");
+						header("location:./");
 					}
 				}
 			}
