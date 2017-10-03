@@ -5,7 +5,7 @@
 	/*	 released under GPLv3 license	   */
 	/***************************************/
 
-	class cMySQL
+	class cMSSQL
 	{
 		var $dbLink;	//Stores the DB connection result set
 		var $dbSelected;	//Flag that signals wheather the Database was selected or not
@@ -30,8 +30,8 @@
 		}
 		
 		///<summary>
-		///Create a new instance of cMySQL, connect to db server and select database
-		///Return values: new instance of cMySQL with db connected
+		///Create a new instance of cMSSQL, connect to db server and select database
+		///Return values: new instance of cMSSQL with db connected
 		///</summary>
 		public static function withDB($host, $id, $pw, $db) {
 			$instance = new self();
@@ -48,11 +48,11 @@
 		{
 			if(!$this->dbLink)
 			{
-				$this->dbLink = mysqli_connect($host, $id, $pw);
+				$this->dbLink = mssql_connect($host, $id, $pw);
 				if(!$this->dbLink)
 				{
-					trigger_error("MySQLi Error: Couldn't connect to database! Check your database settings." . PHP_EOL);
-					cLog::ErrorLog("MySQLi Error: Couldn't connect to database! Check your database settings.");
+					trigger_error("MSSQL Error: Couldn't connect to database! Check your database settings." . PHP_EOL);
+					cLog::ErrorLog("MSSQL Error: Couldn't connect to database! Check your database settings.");
 				}
 			}
 			else
@@ -70,11 +70,11 @@
 		{
 			if($this->dbLink)
 			{
-				$this->dbSelected = mysqli_select_db($this->dbLink, $dbName);
+				$this->dbSelected = mssql_select_db("[" . $dbName . "]", $this->dbLink);
 				if(!$this->dbSelected)
 				{
-					trigger_error("MySQLi Error: Couldnt select database!" . PHP_EOL . mysqli_error($this->dbLink) . PHP_EOL);
-					cLog::ErrorLog("MySQLi Error: Couldnt select database!" . PHP_EOL . "\t" . mysqli_error($this->dbLink));
+					trigger_error("MSSQL Error: Couldnt select database!" . PHP_EOL . mssql_get_last_message() . PHP_EOL);
+					cLog::ErrorLog("MSSQL Error: Couldnt select database!" . PHP_EOL . "\t". mssql_get_last_message());
 				}
 			}
 			else
@@ -85,28 +85,28 @@
 		
 		///<summary>
 		///Execute given SQL Command and return the result set. Used for SELECT, SHOW, DESCRIBE, EXPLAIN, etc.
-		///Return values: Success => MySQL-Result Set | Failure => false
+		///Return values: Success => MSSQL-Result Set | Failure => false
 		///</summary>
 		public function query($sqlString)
 		{
 			if($this->dbLink && $this->dbSelected)
 			{
-				$result = mysqli_query($this->dbLink, $sqlString);
+				$result = mssql_query($sqlString, $this->dbLink);
 				if($result)
 				{
 					return $result;
 				}
 				else
 				{
-					trigger_error("MySQLi Error: " . mysqli_error($this->dbLink) . PHP_EOL);
-					cLog::ErrorLog("MySQLi Error: " . mysqli_error($this->dbLink));
+					trigger_error("MSSQL Error: " . mssql_get_last_message() . PHP_EOL);
+					cLog::ErrorLog("MSSQL Error: " . mssql_get_last_message());
 					return false;
 				}
 			}
 			else
 			{
-				trigger_error("MySQLi Error: Not connected to a database server or database not selected!" . PHP_EOL);
-				cLog::ErrorLog("MySQLi Error: " . mysqli_error($this->dbLink));
+				trigger_error("MSSQL Error: Not connected to a database server or database not selected!" . PHP_EOL);
+				cLog::ErrorLog("MSSQL Error: Not connected to a database server or database not selected!");
 				return false;
 			}
 		}
@@ -119,22 +119,22 @@
 		{
 			if($this->dbLink && $this->dbSelected)
 			{
-				$result = mysqli_query($this->dbLink, $sqlString);
+				$result = mssql_query($sqlString, $this->dbLink);
 				if($result)
 				{
 					return true;
 				}
 				else
 				{
-					trigger_error("MySQLi Error: " . mysqli_error($this->dbLink) . PHP_EOL);
-					cLog::ErrorLog("MySQLi Error: " . mysqli_error($this->dbLink));
+					trigger_error("MSSQL Error: " . mssql_get_last_message() . PHP_EOL);
+					cLog::ErrorLog("MSSQL Error: " . mssql_get_last_message());
 					return false;
 				}
 			}
 			else
 			{
-				trigger_error("MySQLi Error: Not connected to a database server or database not selected!" . PHP_EOL);
-				cLog::ErrorLog("MySQLi Error: Not connected to a database server or database not selected!");
+				trigger_error("MSSQL rror: Not connected to a database server or database not selected!" . PHP_EOL);
+				cLog::ErrorLog("MSSQL rror: Not connected to a database server or database not selected!");
 				return false;
 			}
 		}
@@ -147,29 +147,27 @@
 		{
 			if($this->dbLink && $this->dbSelected)
 			{
-				if($result = mysqli_query($this->dbLink, $sqlString))
-					return mysqli_num_rows($result);
-				else
-					return 0;
+				$result = mssql_query($sqlString, $this->dbLink);
+				return mssql_num_rows($result);
 			}
 			else
 			{
-				trigger_error("MySQLi Error: Not connected to a database server or database not selected!" . PHP_EOL);
-				cLog::ErrorLog("MySQLi Error: Not connected to a database server or database not selected!");
+				trigger_error("MSSQL Error: Not connected to a database server or database not selected!" . PHP_EOL);
+				cLog::ErrorLog("MSSQL Error: Not connected to a database server or database not selected!");
 				return false;
 			}
 		}
 		
 		///<summary>
 		///Fetch a result row as an associative array, a numeric array, or both
-		///Return values: Success => Array | Failure: false
+		///Return values: Success => Array | Failure: Error Message
 		///</summary>
 		function fetchArray($sqlString) {
-			$arr = mysqli_fetch_array($this->query($sqlString));
+			$arr = mssql_fetch_array($this->query($sqlString));
 			if(!$arr)
 			{
-				trigger_error("MySQLi Error: " . mysqli_error($this->dbLink) . PHP_EOL);
-				cLog::ErrorLog("MySQLi Error: " . mysqli_error($this->dbLink));
+				trigger_error("MSSQL Error: " . mssql_get_last_message() . PHP_EOL);
+				cLog::ErrorLog("MSSQL Error: " . mssql_get_last_message());
 				return false;
 			}
 			else
@@ -202,7 +200,7 @@
 			
 			$data = str_replace("'", "''", $data);
 			
-			return mysqli_real_escape_string($data);
+			return mysql_real_escape_string($data);
 		}
 		
 		///<summary>
@@ -211,7 +209,6 @@
 		///</summary>
 		public function close()
 		{
-			mysqli_close($this->dbLink);
+			mssql_close($this->dbLink);
 		}
 	}
-?>

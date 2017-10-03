@@ -26,10 +26,6 @@
 		);
 	}
 
-	include_once("userconfig.class.php");
-
-?>
-
 
 
 

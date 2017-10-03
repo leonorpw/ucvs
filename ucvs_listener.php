@@ -17,7 +17,7 @@
 	//in case no errors are shown uncomment this
 	ini_set("display_errors", 1);
 
-	require_once("classes/ucvs.class.php");
+	require_once("autoload.php");
 
 	$ucvs = new ucvsCore();
 

@@ -5,48 +5,6 @@
 	/*	 released under GPLv3 license	   */
 	/***************************************/
 
-	
-	require_once("config.class.php");
-	require_once("log.class.php");
-	
-	$cfgTemp = new userConfig();
-	
-	if($cfgTemp->dbMode == 0)
-	{
-		if(function_exists("mssql_connect"))
-		{
-			require_once("mssql.class.php");
-		}
-		else if(function_exists("sqlsrv_connect"))
-		{
-			require_once("mssql.sqlsrv.class.php");
-		}
-		else
-		{
-			trigger_error("UCVS Error: No PHP Extension for MSSQL is installed! If you want to use UCVS with MSSQL you need to install either php_mssql for linux or sqlsrv for windows servers!");
-			cLog::ErrorLog("UCVS Error: No PHP Extension for MSSQL is installed! If you want to use UCVS with MSSQL you need to install either php_mssql for linux or sqlsrv for windows servers!");
-		}
-	}
-	else if($cfgTemp->dbMode == 1)
-	{
-		if(function_exists("mysqli_connect"))
-		{
-			require_once("mysql.class.php");
-		}
-		else
-		{
-			trigger_error("UCVS Error: No PHP Extension for MySQL is installed! If you want to use UCVS with MySQL you need to install php_mysqli!");
-			cLog::ErrorLog("UCVS Error: No PHP Extension for MySQL is installed! If you want to use UCVS with MySQL you need to install php_mysqli!");
-		}
-	}
-	else
-	{
-		cLog::ErrorLog("UCVS Error: You have an error in your UCVS config file, please check database settings!");
-		die("You have an error in your UCVS config file, please check database settings!" . PHP_EOL);
-	}
-	
-	unset($cfgTemp);
-
 	class ucvsCore
 	{
 		var $config;
@@ -226,6 +184,7 @@
 					break;
 					
 					case "104.24.8.79": //top100arena
+					case "209.59.143.11": //top100arena
 						$result = $this->doReward($data['postback'], $siteIP);
 					break;
 					
@@ -338,5 +297,3 @@
 			return false;
 		}
 	}
-
-?>

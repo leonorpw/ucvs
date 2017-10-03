@@ -205,5 +205,3 @@
 			sqlsrv_close($this->dbLink);
 		}
 	}
-
-?>

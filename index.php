@@ -29,7 +29,7 @@
 		</div>
 		
 		<?php
-		if(!file_exists("./classes/userconfig.class.php") || (isset($_GET['do']) && $_GET['do'] == 'install'))
+		if(!file_exists("./classes/userConfig.class.php") || (isset($_GET['do']) && $_GET['do'] == 'install'))
 		{
 			include_once("install.php");
 		}

@@ -9,31 +9,9 @@
 	{
 		header("location:./");
 	}
-	require_once("classes/log.class.php");
 	
-	if(function_exists("mssql_connect"))
-	{
-		require_once("classes/mssql.class.php");
-	}
-	else if(function_exists("sqlsrv_connect"))
-	{
-		require_once("classes/mssql.sqlsrv.class.php");
-	}
-	else
-	{
-		trigger_error("PHP extension for MSSQL (php_mssql for linux or sqlsrv for windows servers) is not installed, if you want to use UCVS with MSSQL you need to install one!");
-		cLog::ErrorLog("Installation Error: PHP extension for MSSQL (php_mssql for linux or sqlsrv for windows servers) is not installed, if you want to use UCVS with MSSQL you need to install one!");
-	}
+	require_once("autoload.php");
 	
-	if(function_exists("mysqli_connect"))
-	{
-		require_once("classes/mysql.class.php");
-	}
-	else
-	{
-		trigger_error("PHP Extension for MySQL is not installed, if you want to use UCVS with MySQL you need to install it!");
-		cLog::ErrorLog("Installation Error: PHP Extension for MySQL is not installed, if you want to use UCVS with MySQL you need to install it!");
-	}
 	
 	$error = false;
 ?>

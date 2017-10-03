@@ -44,5 +44,3 @@
 		var $idColName = "";	//name of the column you identify the user with
 		var $pointColName = "";	//name of the column you store the points in
 	}
-
-?>
