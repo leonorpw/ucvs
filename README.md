@@ -42,7 +42,8 @@ Usefull Tips:
 
 
 Troubleshooting:
- - When using top100arena.com you have to append "?postback=" to your "Incentive Postback"-URL in the Server Settings. 
+ - When using top100arena.com you have to append "?postback=" to your "Incentive Postback"-URL in the Server Settings.
+ - If you enabled logging, but the logs arent created check the chmod of the logs folder, it should be at 644. If that didnt help check if the logs folder belongs to the correct user (chown).
  
  
 FAQ:
