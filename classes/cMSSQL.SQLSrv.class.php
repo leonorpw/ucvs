@@ -140,7 +140,7 @@
 		{
 			if($this->dbLink)
 			{
-				$result = sqlsrv_query($this->dbLink, $sqlString);
+				$result = sqlsrv_query($this->dbLink, $sqlString, array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
 				return sqlsrv_num_rows($result);
 			}
 			else
