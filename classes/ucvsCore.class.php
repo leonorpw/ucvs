@@ -199,7 +199,7 @@
 						}
 					break;
 					
-					case "193.70.3.149": //silkroad-servers
+					case "116.203.217.217": //silkroad-servers
 						if($data['voted'] == 1)
 						{
 							$result = $this->doReward($data['userid'], $siteIP);
@@ -210,7 +210,7 @@
 						}
 					break;
 					
-					case "79.137.80.26": //private-server				
+					case "116.203.234.215": //private-server				
 						if($data['voted'] == 1)
 						{
 							$result = $this->doReward($data['userid'], $siteIP);
